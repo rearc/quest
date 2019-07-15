@@ -1,11 +1,11 @@
 # A quest in the clouds
 
 ### Q. What is this quest ?
-##### A. It is a fun way to assess your cloud skills.
+##### A. It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
 
 ### Q. What do i have to do ?
 #####   1) Deploy the app in AWS and find the secret page
-#####   2) Deploy the app in AWS in a Docker container
+#####   2) Deploy the app in a Docker container
 #####   3) Deploy a loadbalancer in front of the app
 #####   4) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment
 #####   5) Add TLS (https)
