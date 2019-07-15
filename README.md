@@ -1,7 +1,13 @@
 # A quest in the clouds
 
 ### Q. What is this quest ?
-##### A. It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
+#####  It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
+
+### Q. Do i need to be an expert in node.js and golang ?
+#####  No. The starting point of the quest app is 'node src/000.js'. That is all the node.js you need to know. And you wont even see golang.
+
+### Q. So what skills should i have ?
+#####  AWS. Cloud concepts. Docker (containerization). IAC (Infrastructure as code). HTTP/HTTPS.
 
 ### Q. What do i have to do ?
 #####   1) Deploy the app in AWS and find the secret page
@@ -22,10 +28,11 @@
 #####  You can do as many as you like. We suspect though that once you start you wont be able to stop. Its addictive.
 
 ### Q. What do i have to submit ?
-#####   1) Terraform and/or Cloudformation template(s) (if you complete step 4)
-#####   2) Dockerfile (if you complete step 2)
-#####   3) Screenshot of the secret page (if you complete step 1)
+#####   1) Terraform and/or Cloudformation template(s) (if you complete stage 4)
+#####   2) Dockerfile (if you complete stage 2)
+#####   3) Screenshot of the secret page (if you complete stage 1)
 #####   4) URL of your stack (if the endpoint is exposed)
 
 ### Q. What if i successfully complete all the challenges ?
 #####  We have many more for you to solve as a member of the Rearc team !
+
