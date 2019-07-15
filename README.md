@@ -28,9 +28,9 @@
 #####  You can do as many as you like. We suspect though that once you start you wont be able to stop. Its addictive.
 
 ### Q. What do i have to submit ?
-#####   1) Terraform and/or Cloudformation template(s) (if you complete step 4)
-#####   2) Dockerfile (if you complete step 2)
-#####   3) Screenshot of the secret page (if you complete step 1)
+#####   1) Terraform and/or Cloudformation template(s) (if you complete stage 4)
+#####   2) Dockerfile (if you complete stage 2)
+#####   3) Screenshot of the secret page (if you complete stage 1)
 #####   4) URL of your stack (if the endpoint is exposed)
 
 ### Q. What if i successfully complete all the challenges ?
