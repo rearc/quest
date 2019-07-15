@@ -1,7 +1,13 @@
 # A quest in the clouds
 
 ### Q. What is this quest ?
-##### A. It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
+#####  It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
+
+### Q. Do i need to be an expert in node.js and golang ?
+#####  No. The starting point of the quest app is 'node src/000.js'. That is all the node.js you need to know. And you wont even see golang.
+
+### Q. So what skills should i have ?
+#####  AWS. Cloud concepts. Docker (containerization). IAC (Infrastructure as code). HTTP/HTTPS.
 
 ### Q. What do i have to do ?
 #####   1) Deploy the app in AWS and find the secret page
