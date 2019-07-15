@@ -1,10 +1,10 @@
 # quest
-A quest in the clouds
+## A quest in the clouds
 
-Q. What is this quest ?
+###### Q. What is this quest ?
 A. It is a fun way to assess your cloud skills.
 
-Q. What is involved ?
+###### Q. What is involved ?
 A. 1) Deploying the app in AWS and finding the secret page
    2) Deploying the app in AWS in a Docker container
    3) Deploying a loadbalancer 
