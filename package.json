@@ -4,12 +4,12 @@
   "description": "",
   "main": "src/000.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/000.js"
   },
   "dependencies": {
     "express": "~4.16.3"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rearc",
   "license": "ISC"
 }
