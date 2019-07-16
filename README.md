@@ -4,7 +4,7 @@
 #####  It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
 
 ### Q. Do i need to be an expert in node.js and golang ?
-#####  No. The starting point of the quest app is 'node src/000.js'. That is all the node.js you need to know. And you wont even see golang.
+#####  No. The starting point of the quest app is `node src/000.js`. That is all the node.js you need to know. And you wont even see golang.
 
 ### Q. So what skills should i have ?
 #####  AWS. Cloud concepts. Docker (containerization). IAC (Infrastructure as code). HTTP/HTTPS.
@@ -18,11 +18,11 @@
 
 ### Q. How do i know i have solved these stages ?
 #####  Each stage can be tested as follows (where <ip_or_host> is the location where the app is deployed) 
-#####   1) AWS/Secret page - http(s)://<ip_or_host>[:port]/
-#####   2) Docker - http(s)://<ip_or_host>[:port]/docker
-#####   3) Loadbalancer - http(s)://<ip_or_host>[:port]/loadbalanced
-#####   4) Terraform and/or Cloudformation - we will test your submitted templates in our account
-#####   5) TLS - http(s)://<ip_or_host>[:port]/tls
+#####   1) AWS/Secret page - `http(s)://<ip_or_host>[:port]/`
+#####   2) Docker - `http(s)://<ip_or_host>[:port]/docker`
+#####   3) Loadbalancer - `http(s)://<ip_or_host>[:port]/loadbalanced`
+#####   4) Terraform and/or Cloudformation - we will test your submitted templates in our AWS account
+#####   5) TLS - `http(s)://<ip_or_host>[:port]/tls`
 
 ### Q. Do i have to do all these ?
 #####  You can do as many as you like. We suspect though that once you start you wont be able to stop. Its addictive.
