@@ -36,3 +36,8 @@
 ### Q. What if i successfully complete all the challenges ?
 #####  We have many more for you to solve as a member of the Rearc team !
 
+### Q. What if i find a bug ?
+#####  Awesome! Lets talk.
+
+### Q. What if i fail ?
+#####  Do. Or do not. There is no fail.
