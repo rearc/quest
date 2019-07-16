@@ -7,10 +7,10 @@
 #####  No. The starting point of the quest app is `npm install && node src/000.js`. That is all the node.js you need to know. And you wont even see golang.
 
 ### Q. So what skills should i have ?
-#####  AWS. Cloud concepts. Docker (containerization). IAC (Infrastructure as code). HTTP/HTTPS.
+#####  AWS. Cloud concepts. Docker (containerization). IAC (Infrastructure as code). HTTP/HTTPS. Linux/Unix.
 
 ### Q. What do i have to do ?
-#####   1) Deploy the app in AWS and find the secret page
+#####   1) Deploy the app in AWS and find the secret page. Use Linux 64-bit as your OS (Amazon Linux preferred).
 #####   2) Deploy the app in a Docker container
 #####   3) Deploy a loadbalancer in front of the app
 #####   4) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment
