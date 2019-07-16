@@ -21,7 +21,7 @@
 #####   1) AWS/Secret page - `http(s)://<ip_or_host>[:port]/`
 #####   2) Docker - `http(s)://<ip_or_host>[:port]/docker`
 #####   3) Loadbalancer - `http(s)://<ip_or_host>[:port]/loadbalanced`
-#####   4) Terraform and/or Cloudformation - we will test your submitted templates in our account
+#####   4) Terraform and/or Cloudformation - we will test your submitted templates in our AWS account
 #####   5) TLS - `http(s)://<ip_or_host>[:port]/tls`
 
 ### Q. Do i have to do all these ?
