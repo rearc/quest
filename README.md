@@ -12,24 +12,26 @@
 ### Q. What do i have to do ?
 #####   1) Deploy the app in AWS and find the secret page. Use Linux 64-bit as your OS (Amazon Linux preferred)
 #####   2) Deploy the app in a Docker container. Use `node:10` as the base image
-#####   3) Deploy a loadbalancer in front of the app
-#####   4) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment
-#####   5) Add TLS (https)
+#####   3) Inject an environment variable (SECRET_WORD) in the docker container. The value of SECRET_WORD should be the secret word discovered on the secret page
+#####   4) Deploy a loadbalancer in front of the app
+#####   5) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment
+#####   6) Add TLS (https)
 
 ### Q. How do i know i have solved these stages ?
 #####  Each stage can be tested as follows (where <ip_or_host> is the location where the app is deployed) 
 #####   1) AWS/Secret page - `http(s)://<ip_or_host>[:port]/`
 #####   2) Docker - `http(s)://<ip_or_host>[:port]/docker`
-#####   3) Loadbalancer - `http(s)://<ip_or_host>[:port]/loadbalanced`
-#####   4) Terraform and/or Cloudformation - we will test your submitted templates in our AWS account
-#####   5) TLS - `http(s)://<ip_or_host>[:port]/tls`
+#####   3) SECRET_WORD env variable - `http(s)://<ip_or_host>[:port]/secret_word`
+#####   4) Loadbalancer - `http(s)://<ip_or_host>[:port]/loadbalanced`
+#####   5) Terraform and/or Cloudformation - we will test your submitted templates in our AWS account
+#####   6) TLS - `http(s)://<ip_or_host>[:port]/tls`
 
 ### Q. Do i have to do all these ?
 #####  You can do as many as you like. We suspect though that once you start you wont be able to stop. Its addictive.
 
 ### Q. What do i have to submit ?
-#####   1) Terraform and/or Cloudformation template(s) (if you complete stage 4)
-#####   2) Dockerfile (if you complete stage 2)
+#####   1) Terraform and/or Cloudformation template(s) (if you complete stage 5)
+#####   2) Dockerfile (if you complete stages 2 and 3)
 #####   3) Screenshot of the secret page (if you complete stage 1)
 #####   4) URL of your stack (if the endpoint is exposed)
 
