@@ -14,7 +14,7 @@
 #####   2) Deploy the app in a Docker container. Use `node:10` as the base image
 #####   3) Inject an environment variable (SECRET_WORD) in the docker container. The value of SECRET_WORD should be the secret word discovered on the secret page
 #####   4) Deploy a loadbalancer in front of the app
-#####   5) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment
+#####   5) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment. (Use the latest version of Terraform available at the time)
 #####   6) Add TLS (https). Its OK to use locally generated certs.
 
 ### Q. How do i know i have solved these stages ?
