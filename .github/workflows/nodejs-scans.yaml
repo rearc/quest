@@ -1,4 +1,4 @@
-name: npm audit
+name: Node.js scans and audits
 
 on:
   pull_request:
@@ -8,7 +8,19 @@ on:
       - 'releases/*'
 
 jobs:
-  scan:
+  njsscan:
+    runs-on: ubuntu-latest
+    name: njsscan check
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+    - name: nodejsscan scan
+      id: njsscan
+      uses: ajinabraham/njsscan-action@master
+      with:
+        args: '.'
+
+  npmaudit:
     name: npm audit
     runs-on: ubuntu-latest
     steps:
