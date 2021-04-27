@@ -1,0 +1,53 @@
+name: Terraform plan to trigger terraform apply on aws lambda.
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  TF_VERSION: 0.15.1
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+          with:
+            terraform_version: ${{ TF_VERSION }}
+
+      - name: Setup AWS Credentials
+        run: |
+          mkdir -p .aws
+
+          echo "[planner]" > .aws/credentials
+          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_PLANNER }}" >> .aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_PLANNER }}" >> .aws/credentials
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: |
+          terraform plan -no-color -out tf.plan
+          terraform show -json tf.plan > tf.json
+
+      - name: AWS Credentials cleanup
+        if: always()
+        run: |
+          rm -rf .aws
+
+      - name: Upload Plan File
+        uses: zdurham/s3-upload-github-action@master
+        env:
+          FILE: ./tf.plan
+          AWS_REGION: 'us-east-2'
+          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          S3_KEY: '/'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
