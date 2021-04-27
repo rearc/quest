@@ -49,5 +49,5 @@ jobs:
           AWS_REGION: 'us-east-2'
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           S3_KEY: '/'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PLANNER }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PLANNER }}
