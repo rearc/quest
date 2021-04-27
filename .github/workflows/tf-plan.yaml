@@ -25,7 +25,7 @@ jobs:
         run: |
           mkdir -p .aws
 
-          echo "[planner]" > .aws/credentials
+          echo "[default]" > .aws/credentials
           echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_PLANNER }}" >> .aws/credentials
           echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_PLANNER }}" >> .aws/credentials
 
