@@ -5,6 +5,7 @@ resource "aws_eip" "alb_ip" {
   tags = var.tags
 }
 
+#tfsec:ignore:AWS005
 resource "aws_lb" "rearc_quest_alb" {
   name               = "rearc-quest-alb"
   internal           = false
