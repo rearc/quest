@@ -25,7 +25,7 @@ resource "aws_instance" "rearc_quest_ec2" {
   ebs_optimized = true
 
   metadata_options {
-    http_endpoint = disabled
+    http_endpoint = "disabled"
   }
 
   root_block_device {
