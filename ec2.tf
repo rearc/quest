@@ -1,17 +1,17 @@
 data "aws_ami" "amazon-linux-2" {
- most_recent = true
+  most_recent = true
+  owners      = ["self", "amazon"]
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
 
 
- filter {
-   name   = "owner-alias"
-   values = ["amazon"]
- }
-
-
- filter {
-   name   = "name"
-   values = ["amzn2-ami-hvm*"]
- }
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
+  }
 }
 
 resource "aws_instance" "rearc_quest_ec2" {
@@ -21,7 +21,7 @@ resource "aws_instance" "rearc_quest_ec2" {
   vpc_security_group_ids      = [ aws_security_group.allow_from_alb.id ]
   subnet_id                   = var.private_subnet_id
 
-  user_data = cloudinit_config.example.rendered
+  user_data = data.cloudinit_config.quest_cloudinit.rendered
 }
 
 resource "aws_security_group" "allow_from_alb" {
@@ -61,7 +61,7 @@ resource "aws_lb_target_group" "ec2_target_group" {
 
 resource "aws_lb_target_group_attachment" "ec2_target_group_attachment" {
   target_group_arn = aws_lb_target_group.ec2_target_group.arn
-  target_id        = aws_instance.rearc_quest_ec2
+  target_id        = aws_instance.rearc_quest_ec2.id
 }
 
 locals {
@@ -81,7 +81,7 @@ locals {
   END
 }
 
-data "cloudinit_config" "example" {
+data "cloudinit_config" "quest_cloudinit" {
   gzip          = false
   base64_encode = false
 

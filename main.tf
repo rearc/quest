@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket = "rearc-quest-infra-tf-state"
-    key = "rearc-quest-infra/prod/tf-executor"
+    key = "rearc-quest/prod/quest"
     dynamodb_table = "rearc-quest-infra-tf-state-locking"
     region = "us-east-2"
   }
