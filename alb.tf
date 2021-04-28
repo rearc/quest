@@ -49,6 +49,7 @@ resource "aws_security_group" "allow_tls" {
   tags = var.tags
 }
 
+#tfsec:ignore:AWS077
 resource "aws_s3_bucket" "access_logs" {
   bucket = "rearc-quest-access-logs"
   acl    = "log-delivery-write"
@@ -56,7 +57,7 @@ resource "aws_s3_bucket" "access_logs" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        ss3_algorithm = AES256
+        sse_algorithm = AES256
       }
     }
   }
