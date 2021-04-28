@@ -5,7 +5,6 @@ resource "aws_eip" "alb_ip" {
   tags = var.tags
 }
 
-# checkov:skip=CKV_AWS_150:Allowing for easy delete
 resource "aws_lb" "rearc_quest_alb" {
   name               = "rearc-quest-alb"
   internal           = false
@@ -14,6 +13,13 @@ resource "aws_lb" "rearc_quest_alb" {
   security_groups    = [ aws_security_group.allow_tls.id ]
 
   drop_invalid_header_fields = true
+  # checkov:skip=CKV_AWS_150:Allowing for easy delete
+
+  access_logs {
+    bucket  = aws_s3_bucket.access_logs.id
+    prefix  = "rearc-quest"
+    enabled = true
+  }
 
   tags = var.tags
 }
@@ -39,6 +45,13 @@ resource "aws_security_group" "allow_tls" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
+
+  tags = var.tags
+}
+
+resource "aws_s3_bucket" "access_logs" {
+  bucket = "rearc-quest-access-logs"
+  acl    = "log-delivery-write"
 
   tags = var.tags
 }
