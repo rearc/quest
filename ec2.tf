@@ -21,8 +21,15 @@ resource "aws_instance" "rearc_quest_ec2" {
   vpc_security_group_ids      = [ aws_security_group.allow_from_alb.id ]
   subnet_id                   = var.private_subnet_id
 
+  monitoring    = true
+  ebs_optimized = true
+
   metadata_options {
     http_endpoint = disabled
+  }
+
+  root_block_device {
+    encrypted = true
   }
 
   user_data = data.cloudinit_config.quest_cloudinit.rendered
