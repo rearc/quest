@@ -1,0 +1,14 @@
+[Unit]
+Description=Starting on a quest with nodejs
+Documentation=github.com/stvcooke/rearc-quest
+After=network.target
+
+[Service]
+Environment=NODE_PORT=3000
+Type=simple
+User=ec2-user
+ExecStart=cd ~/quest && /usr/bin/npm start /home/ec2-user/quest/src/000.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
