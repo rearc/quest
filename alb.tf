@@ -9,7 +9,7 @@ resource "aws_lb" "rearc_quest_alb" {
   name               = "rearc-quest-alb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = [ var.public_subnet_id ]
+  subnets            = [ var.public_subnet_id, var.public_subnet2_id ]
   security_groups    = [ aws_security_group.allow_tls.id ]
 
   tags = var.tags

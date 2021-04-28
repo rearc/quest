@@ -17,3 +17,7 @@ terraform {
 provider "aws" {
   region = var.aws_region
 }
+
+data "aws_iam_policy" "ssm_policy" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}

@@ -25,14 +25,14 @@ resource "aws_instance" "rearc_quest_ec2" {
 }
 
 resource "aws_security_group" "allow_from_alb" {
-  name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
+  name        = "allow_3000_from_alb"
+  description = "Allow inbound traffic from ALB on port 3000"
   vpc_id      = var.vpc_id
 
   ingress {
     description      = "Traffic from ALB SG"
-    from_port        = 0
-    to_port          = 0
+    from_port        = 3000
+    to_port          = 3000
     protocol         = "tcp"
     security_groups  = [ aws_security_group.allow_tls.id ]
   }
@@ -107,4 +107,26 @@ data "cloudinit_config" "quest_cloudinit" {
     systemctl enable quest
     EOF
   }
+}
+
+resource "aws_iam_instance_profile" "ec2_ssm_profile" {
+  name = "ec2_ssm_profile"
+  role = aws_iam_role.ssm_role.name
+}
+
+data "aws_iam_policy_document" "instance_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ssm_role" {
+  name                = "rearc-quest-ssm-role"
+  assume_role_policy  = data.aws_iam_policy_document.instance_assume_role_policy.json
+  managed_policy_arns = [data.aws_iam_policy.ssm_policy.arn]
 }

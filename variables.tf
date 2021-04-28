@@ -23,6 +23,12 @@ variable "public_subnet_id" {
   default = "subnet-002ac4fd689e3f61a"
 }
 
+variable "public_subnet2_id" {
+  type = string
+
+  default = "subnet-0cfcb67013a4779d2"
+}
+
 variable "vpc_id" {
   type = string
 
