@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - 'tf-plan-*'
 
 env:
   TF_VERSION: 0.15.1
@@ -23,11 +24,11 @@ jobs:
 
       - name: Setup AWS Credentials
         run: |
-          mkdir -p .aws
+          mkdir -p ~/.aws
 
-          echo "[default]" > .aws/credentials
-          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_PLANNER }}" >> .aws/credentials
-          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_PLANNER }}" >> .aws/credentials
+          echo "[default]" > ~/.aws/credentials
+          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_PLANNER }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_PLANNER }}" >> ~/.aws/credentials
 
       - name: Terraform Init
         run: terraform init
@@ -40,7 +41,7 @@ jobs:
       - name: AWS Credentials cleanup
         if: always()
         run: |
-          rm -rf .aws
+          rm -rf ~/.aws
 
       - name: Upload Plan File
         uses: zdurham/s3-upload-github-action@master
