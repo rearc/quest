@@ -19,7 +19,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: ${{ TF_VERSION }}
+          terraform_version: ${{ env.TF_VERSION }}
 
       - name: Setup AWS Credentials
         run: |
