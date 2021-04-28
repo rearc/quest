@@ -13,7 +13,6 @@ resource "aws_lb" "rearc_quest_alb" {
   security_groups    = [ aws_security_group.allow_tls.id ]
 
   drop_invalid_header_fields = true
-  # checkov:skip=CKV_AWS_150:Allowing for easy delete
 
   access_logs {
     bucket  = aws_s3_bucket.access_logs.id
@@ -21,6 +20,7 @@ resource "aws_lb" "rearc_quest_alb" {
     enabled = true
   }
 
+  # checkov:skip=CKV_AWS_150:Allowing for easy delete
   tags = var.tags
 }
 
@@ -53,5 +53,19 @@ resource "aws_s3_bucket" "access_logs" {
   bucket = "rearc-quest-access-logs"
   acl    = "log-delivery-write"
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        ss3_algorithm = AES256
+      }
+    }
+  }
+
+
+  # checkov:skip=CKV_AWS_21:Not versioning logs
+  # checkov:skip=CKV_AWS_18:Not doing access logs for the access logs bucket
+  # checkov:skip=CKV_AWS_52:Not doing mfa delete so I can delete this easier later
+  # checkov:skip=CKV_AWS_144:Not enabling cross-region because we don't care so much about logs
+  # checkov:skip=CKV_AWS_145:Not encrypting with KMS
   tags = var.tags
 }
