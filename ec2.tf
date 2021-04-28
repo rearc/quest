@@ -15,11 +15,15 @@ data "aws_ami" "amazon-linux-2" {
 }
 
 resource "aws_instance" "rearc_quest_ec2" {
-  ami                         = "${data.aws_ami.amazon-linux-2.id}"
+  ami                         = data.aws_ami.amazon-linux-2.id
   associate_public_ip_address = false
   instance_type               = "t3.micro"
   vpc_security_group_ids      = [ aws_security_group.allow_from_alb.id ]
   subnet_id                   = var.private_subnet_id
+
+  metadata_options {
+    http_endpoint = disabled
+  }
 
   user_data = data.cloudinit_config.quest_cloudinit.rendered
 }
