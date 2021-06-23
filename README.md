@@ -1,7 +1,7 @@
 # A quest in the clouds
 
 ### Q. What is this quest ?
-#####  It is a fun way to assess your cloud skills. Quest is a webapp made with node.js and golang.
+#####  It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. Quest is a webapp made with node.js and golang.
 
 ### Q. Do i need to be an expert in node.js and golang ?
 #####  No. The starting point of the quest app is `npm install && npm start`. That is all the node.js you need to know. And you wont even see golang.
@@ -14,8 +14,8 @@
 #####   2) Deploy the app in a Docker container. Use `node:10` as the base image
 #####   3) Inject an environment variable (SECRET_WORD) in the docker container. The value of SECRET_WORD should be the secret word discovered on the secret page
 #####   4) Deploy a loadbalancer in front of the app
-#####   5) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for single click deployment
-#####   6) Add TLS (https)
+#####   5) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for "single click" deployment (Use the latest version of Terraform available at the time)
+#####   6) Add TLS (https). Its OK to use locally generated certs.
 
 ### Q. How do i know i have solved these stages ?
 #####  Each stage can be tested as follows (where <ip_or_host> is the location where the app is deployed) 
@@ -43,3 +43,6 @@
 
 ### Q. What if i fail ?
 #####  Do. Or do not. There is no fail.
+
+### Q. Can i share this quest with others ?
+##### No.
