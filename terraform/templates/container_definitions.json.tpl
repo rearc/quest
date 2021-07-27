@@ -3,7 +3,12 @@
         "name": "${appName}",
         "image": "${appImage}:latest",
         "secrets": [],
-        "environment": [],
+        "environment": [
+            {
+                "name": "SECRET_WORD",
+                "value": "${secretWord}"
+            }
+        ],
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {

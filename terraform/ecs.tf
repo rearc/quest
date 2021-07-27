@@ -110,6 +110,7 @@ module "app_ecs_service" {
     region   = data.aws_region.current.name
     appName  = "rearc-quest-prod",
     appImage = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/rearc-quest"
+    secretWord = var.secret_word
   })
 
   ecr_repo_arns = [
