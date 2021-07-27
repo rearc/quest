@@ -103,6 +103,7 @@ module "app_ecs_service" {
   logs_cloudwatch_group = "/ecs/rearc-quest-prod"
   tasks_desired_count   = 1
   ecs_use_fargate       = true
+  fargate_platform_version = "1.3.0"
 
   associate_alb      = true
   alb_security_group = module.alb_sg.security_group_id
