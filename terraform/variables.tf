@@ -1,4 +1,4 @@
 variable "secret_word" {
-    description = "Secret word for Rearc Quest"
-    sensitive = true
+  description = "Secret word for Rearc Quest"
+  sensitive   = true
 }

@@ -98,19 +98,19 @@ module "app_ecs_service" {
     arn  = module.ecs.ecs_cluster_arn
     name = module.ecs.ecs_cluster_name
   }
-  ecs_vpc_id            = module.vpc.vpc_id
-  ecs_subnet_ids        = module.vpc.private_subnets
-  logs_cloudwatch_group = "/ecs/rearc-quest-prod"
-  tasks_desired_count   = 1
-  ecs_use_fargate       = true
+  ecs_vpc_id               = module.vpc.vpc_id
+  ecs_subnet_ids           = module.vpc.private_subnets
+  logs_cloudwatch_group    = "/ecs/rearc-quest-prod"
+  tasks_desired_count      = 1
+  ecs_use_fargate          = true
   fargate_platform_version = "1.3.0"
 
   associate_alb      = true
   alb_security_group = module.alb_sg.security_group_id
   container_definitions = templatefile("${path.module}/templates/container_definitions.json.tpl", {
-    region   = data.aws_region.current.name
-    appName  = "rearc-quest-prod",
-    appImage = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/rearc-quest"
+    region     = data.aws_region.current.name
+    appName    = "rearc-quest-prod",
+    appImage   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/rearc-quest"
     secretWord = var.secret_word
   })
 
