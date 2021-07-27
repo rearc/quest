@@ -3,11 +3,11 @@ module "ecs" {
   version = "~> 3.0"
 
   name               = "rearc-quest"
-  container_insights = true
-  capacity_providers = ["FARGATE"]
+  container_insights = false
+  capacity_providers = ["FARGATE_SPOT"]
   default_capacity_provider_strategy = [
     {
-      capacity_provider = "FARGATE"
+      capacity_provider = "FARGATE_SPOT"
     }
   ]
 }

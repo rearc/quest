@@ -11,11 +11,6 @@ module "alb" {
   subnets         = module.vpc.public_subnets
   security_groups = [module.alb_sg.security_group_id]
 
-  #   access_logs = {
-  #     bucket = aws_s3_bucket.access_logs.id
-  #     prefix = "rearc-quest"
-  #   }
-
   target_groups = [
     {
       name_prefix      = "ecs-"
@@ -27,13 +22,32 @@ module "alb" {
 
   http_tcp_listeners = [
     {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
+      port        = 80
+      protocol    = "HTTP"
+      action_type = "redirect"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
     },
     {
-      port               = 8080
-      protocol           = "HTTP"
+      port        = 8080
+      protocol    = "HTTP"
+      action_type = "redirect"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+  ]
+
+  https_listeners = [
+    {
+      port               = 443
+      protocol           = "HTTPS"
+      certificate_arn    = aws_acm_certificate.rearc_quest.arn
       target_group_index = 0
     }
   ]
