@@ -27,3 +27,5 @@ This will document the steps I took in attempting to complete the Quest Challeng
 11. With the above not working I reviewed the use of AWS Beanstalk. I was able to create an application and get this up and running with an NGINX error due to a bad gateway. Some research uncovered that Beanstalk publishes on port 8081 even though the file in the code base suggests a port of 3000. I updated the file to show const port = process.env.PORT || 3000 and added an environment variable inside the Beanstalk instance for port 8081. This allowed me to access the site but I again got the permission denied warning.
 
 12. After a break I tried my EC2 instance again, this time cloning straight from the GitHub repo shared to me by Rearc. This was successful! I therefore forked the Rearc repo and ran this successfully as well. THat is where I will be submitting this code.
+
+13. I then created my Dockerfile and got the project running in a Docker container as well on port 3500. I also added the secret word variable into the container at this point.
