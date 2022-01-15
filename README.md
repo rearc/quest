@@ -11,7 +11,7 @@
 
 ### Q. What do i have to do ?
 #####   1) Deploy the app in any pyblic cloud and find the secret page. Use Linux 64-bit x86/64 as your OS (Amazon Linux preferred in AWS, Similar Linux flavor preferred in GCP and Azure)
-#####   2) Deploy the app in a Docker container. Use `node:10` as the base image
+#####   2) Deploy the app in a Docker container or any other container orchestration engine available in the public cloud provider. Use `node:10` or later as the base image
 #####   3) Inject an environment variable (SECRET_WORD) in the docker container. The value of SECRET_WORD should be the secret word discovered on the secret page
 #####   4) Deploy a loadbalancer in front of the app
 #####   5) Complete "Terraform"ing and/or "Cloudformation"ing the entire stack for "single click" deployment (Use the latest version of Terraform available at the time)
