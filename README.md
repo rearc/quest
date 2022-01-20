@@ -27,7 +27,7 @@
 #####   6) TLS - `http(s)://<ip_or_host>[:port]/tls`
 
 ### Q. Do i have to do all these ?
-#####  You can do as many as you like. We suspect though that once you start you wont be able to stop. Its addictive. Extra points for submitting working entries for multiple cloud providers.
+#####  You can do as many as you like. We suspect though that once you start you wont be able to stop. Its addictive. Extra credit for submitting working entries for multiple cloud providers.
 
 ### Q. What do i have to submit ?
 #####   1) Terraform and/or Cloudformation template(s) (if you complete stage 5)
