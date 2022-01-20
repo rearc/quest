@@ -13,7 +13,7 @@ You may do all or some of the following tasks. Please read over the complete lis
 
 1. If you know how to use git, start a git repository (local-only is acceptable) and commit all of your work to it.
 2. Deploy the app in any public cloud and navigate to the index page. Use Linux 64-bit x86/64 as your OS (Amazon Linux preferred in AWS, Similar Linux flavor preferred in GCP and Azure)
-3. Deploy the app in a Docker container. Use `node:10` as the base image.
+3. Deploy the app in a Docker container. Use `node` as the base image. Version `node:10` or later should work. 
 4. Inject an environment variable (`SECRET_WORD`) in the Docker container. The value of `SECRET_WORD` should be the secret word discovered on the index page of the application.
 5. Deploy a load balancer in front of the app.
 6. Use Infrastructure as Code (IaC) to "codify" your deployment. Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
