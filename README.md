@@ -10,7 +10,7 @@
 #####  Any one or more public cloud providers: AWS, GCP, Azure. Cloud concepts. Docker (containerization). IAC (Infrastructure as code). HTTP/HTTPS. Linux/Unix.
 
 ### Q. What do i have to do ?
-#####   1) Deploy the app in any pyblic cloud and find the secret page. Use Linux 64-bit x86/64 as your OS (Amazon Linux preferred in AWS, Similar Linux flavor preferred in GCP and Azure)
+#####   1) Deploy the app in any public cloud and find the secret page. Use Linux 64-bit x86/64 as your OS (Amazon Linux preferred in AWS, Similar Linux flavor preferred in GCP and Azure)
 #####   2) Deploy the app in a Docker container or any other container orchestration engine available in the public cloud provider. Use `node:10` or later as the base image
 #####   3) Inject an environment variable (SECRET_WORD) in the docker container. The value of SECRET_WORD should be the secret word discovered on the secret page
 #####   4) Deploy a loadbalancer in front of the app
