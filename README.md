@@ -38,7 +38,7 @@ You may do whichever, and however many, of the tasks above as you'd like. We sus
 You may do all or some of the following tasks. Please read over the complete list before starting.
 
 1. If you know how to use git, start a git repository (local-only is acceptable) and commit all of your work to it.
-2. Deploy the app in AWS and navigate to the index page. Use Linux 64-bit as your OS (Amazon Linux preferred).
+2. Deploy the app in one or more public clouds and navigate to the respective index page(s). Use Linux 64-bit as your OS (Amazon Linux preferred).
 3. Deploy the app in a Docker container. Use `node:10` as the base image.
 4. Inject an environment variable (`SECRET_WORD`) in the Docker container. The value of `SECRET_WORD` should be the secret word discovered on the index page of the application.
 5. Deploy a load balancer in front of the app.
