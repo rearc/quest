@@ -56,7 +56,7 @@ If you _want_ to host it longer for us to view it, we recommend taking a screens
 We have many more for you to solve as a member of the Rearc team!
 
 ### Q. What if I find a bug?
-Awesome! Tell us you found a bug in your submission, ideally in an email, and we'll talk more!
+Awesome! Tell us you found a bug alongwith your submission and we'll talk more!
 
 ### Q. What if I fail?
 There is no fail. Complete whatever you can and then submit your work. Doing _everything_ in the quest is not a guarantee that you will "pass" the quest, just like not doing something is not a guarantee you will "fail" the quest.
