@@ -1,0 +1,7 @@
+# Docker ignore file
+# This will prohibit files unrelated to the application from entering the container's build stage.
+cdk/
+node_modules/
+Makefile
+.gitignore
+.git
