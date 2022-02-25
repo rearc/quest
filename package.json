@@ -1,15 +1,19 @@
 {
   "name": "quest",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rearc Quest",
   "main": "src/000.js",
   "scripts": {
     "start": "node src/000.js"
   },
-  "dependencies": {
-    "express": "~4.16.3"
-  },
   "keywords": [],
   "author": "Rearc",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonfinley/quest.git"
+  },
+  "dependencies": {
+    "express": "~4.16.3"
+  }
 }
