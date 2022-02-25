@@ -17,4 +17,4 @@ COPY . .
 # EXPOSE PORT, only use for dev
 EXPOSE 3000
 # RUN APP
-RUN ["npm", "start"]
+CMD ["npm", "start"]
