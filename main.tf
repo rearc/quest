@@ -17,8 +17,8 @@ resource "aws_ecr_repository" "rearc-quest" {
   name = "rearc-quest" # Name of Repo
 }
 
-resource "aws_ecs_cluster" "rearc-quest" {
-  name = "rearc-quest" # Name of Cluster
+resource "aws_ecs_cluster" "rearc_quest" {
+  name = "rearc_quest" # Name of Cluster
 }
 
 resource "aws_ecs_task_definition" "rearc_quest" {
@@ -70,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 
 resource "aws_ecs_service" "rearc_quest" {
   name            = "rearc_quest" # Service Name
-  cluster         = "${aws_ecs_cluster.rearc-quest.id}" # Cluster
+  cluster         = "${aws_ecs_cluster.rearc_quest.id}" # Cluster
   task_definition = "${aws_ecs_task_definition.rearc_quest.arn}" # Task to Start
   launch_type     = "FARGATE"
   desired_count   = 2 
@@ -84,6 +84,7 @@ resource "aws_ecs_service" "rearc_quest" {
   network_configuration {
     subnets = ["${aws_default_subnet.rearc_quest_a.id}", "${aws_default_subnet.rearc_quest_b.id}", "${aws_default_subnet.rearc_quest_c.id}"]
     assign_public_ip = true
+    security_groups = ["${aws_security_group.rearc_quest_security_group.id}"]
   }
 }
 
@@ -122,6 +123,23 @@ resource "aws_security_group" "rearc_quest_load_balancer_security_group" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # Allowing traffic in from all sources
+  }
+
+  egress {
+    from_port   = 0 # Allowing any incoming port
+    to_port     = 0 # Allowing any outgoing port
+    protocol    = "-1" # Allowing any outgoing protocol 
+    cidr_blocks = ["0.0.0.0/0"] # Allowing traffic out to all IP addresses
+  }
+}
+
+resource "aws_security_group" "rearc_quest_service_security_group" {
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    # Only allowing traffic in from the load balancer security group
+    security_groups = ["${aws_security_group.rearc_quest_load_balancer_security_group.id}"]
   }
 
   egress {
