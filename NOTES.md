@@ -29,7 +29,20 @@ Azure browse to ``
 
 Secret Word was viewed
 
-## Part 3
+## Part 3 - dockerization
 
 Dockerfile base was written and updated with the secret_word, seems to get stuck at the end of the build process after `# Rearc quest listening on port 3000!`
 Adjusted dockerfile line 21
+Github Container Registry Created with github actions
+ECR Created with Terraform and AWS CLI
+
+```
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 837525715721.dkr.ecr.us-east-2.amazonaws.com
+docker build -t rearc-quest .
+docker tag rearc-quest:latest 837525715721.dkr.ecr.us-east-2.amazonaws.com/rearc-quest:latest
+docker push 837525715721.dkr.ecr.us-east-2.amazonaws.com/rearc-quest:latest
+```
+
+## Part 4 -
+
+Built the Terraform main.tf
