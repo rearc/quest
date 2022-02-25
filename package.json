@@ -4,6 +4,7 @@
   "description": "Rearc Quest",
   "main": "src/000.js",
   "scripts": {
+    "dev": "nodemon src/000.js",
     "start": "node src/000.js"
   },
   "keywords": [],
@@ -15,5 +16,10 @@
   },
   "dependencies": {
     "express": "~4.16.3"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "nodemon": "^2.0.15"
   }
 }
