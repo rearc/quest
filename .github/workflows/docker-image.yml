@@ -22,4 +22,3 @@ jobs:
         docker build . --file Dockerfile --tag ghcr.io/jonfinley/rearc-quest:latest
         docker run ghcr.io/jonfinley/rearc-quest:latest
         docker push ghcr.io/jonfinley/rearc-quest:latest
-     env: 
