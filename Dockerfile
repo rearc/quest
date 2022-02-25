@@ -1,5 +1,6 @@
 # BASE IMAGE - REARC: Use node as the base image. Version node:10 or later should work.
 FROM node:16
+LABEL org.opencontainers.image.source="https://github.com/jonfinley/quest"
 # APP DIRECTORY
 #WORKDIR /usr/src/app
 
