@@ -3,7 +3,7 @@ FROM node:16
 # APP DIRECTORY
 #WORKDIR /usr/src/app
 
-ENV SECRET_WORD=REARC_SECRET_WORD
+ENV SECRET_WORD=TwelveFactor
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
