@@ -10,7 +10,7 @@ jobs:
 
   build:
 
-    runs-on: node:16
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
