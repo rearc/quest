@@ -166,17 +166,21 @@ resource "aws_lb_target_group" "rearc_quest_target_group" {
   }
 }
 
-resource "aws_lb_listener" "rearc_quest_listener" {
+resource "aws_lb_listener" "rq_http_listen" {
   load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
   port              = "80"
   protocol          = "HTTP"
   default_action {
-    type             = "forward"
-    target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" 
+    type = "redirect"
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
-resource "aws_lb_listener" "rearc_quest_listener_https" {
+resource "aws_lb_listener" "rq_https_listen" {
   load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
   port              = "443"
   protocol          = "HTTPS"
