@@ -1,2 +1,8 @@
 .DS_STORE
 .dccache
+*.tfvars
+.terraform
+*.tfstate
+*.backup
+*.hcl
+.terraform.tfstate.lock.info
