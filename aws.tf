@@ -30,6 +30,7 @@ resource "aws_ecs_task_definition" "rearc_quest" {
     }
   ]
   DEFINITION
+  # the variable above uses the generated repo url.
   requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
   network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
   memory                   = 512         # Specifying the memory our container requires
@@ -37,6 +38,7 @@ resource "aws_ecs_task_definition" "rearc_quest" {
   execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
 }
 
+# Manage IAM:
 resource "aws_iam_role" "ecsTaskExecutionRole" {
   name = "ecsTaskExecutionRole"
   assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
@@ -58,12 +60,14 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# Create your Service
 resource "aws_ecs_service" "rearc_quest" {
   name            = "rearc_quest" # Service Name
   cluster         = "${aws_ecs_cluster.rearc_quest.id}" # Cluster
   task_definition = "${aws_ecs_task_definition.rearc_quest.arn}" # Task to Start
   launch_type     = "FARGATE"
   desired_count   = 2 
+
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" # Referencing our target group
@@ -109,11 +113,21 @@ resource "aws_alb" "rearc_quest_application_load_balancer" {
 # Creating a security group for the load balancer:
 resource "aws_security_group" "rearc_quest_load_balancer_security_group" {
   ingress {
+    description = "allow port 80"
     from_port   = 80 # Allowing traffic in from port 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # Allowing traffic in from all sources
   }
+  ingress {
+    description = "allow port 443"
+    from_port   = 443 # Allowing traffic in from port 80
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allowing traffic in from all sources
+  }
+
+
 
   egress {
     from_port   = 0 # Allowing any incoming port
@@ -162,6 +176,18 @@ resource "aws_lb_listener" "rearc_quest_listener" {
   }
 }
 
+resource "aws_lb_listener" "rearc_quest_listener_https" {
+  load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = data.aws_acm_certificate.cert.arn
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" 
+  }
+}
+
 ### CERTIFICATE
 data "cloudflare_zone" "domain" {
   name = var.cf_domain
@@ -198,3 +224,8 @@ resource "cloudflare_record" "validation" {
 
   allow_overwrite = true
 }
+
+data "aws_acm_certificate" "cert" {
+  domain = var.cf_domain
+}
+
