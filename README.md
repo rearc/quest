@@ -68,7 +68,7 @@ We have many more for you to solve as a member of the Rearc team!
 
 ## Q. What if I find a bug?
 
-Awesome! Tell us you found a bug alongwith your submission and we'll talk more!
+Awesome! Tell us you found a bug along with your submission and we'll talk more!
 
 ## Q. What if I fail?
 

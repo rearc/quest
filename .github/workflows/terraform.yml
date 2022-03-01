@@ -72,7 +72,7 @@ jobs:
     #- name: Terraform Format
     #  id: fmt
     #  run: terraform fmt -check
-      # Terraform Init the Config
+    # Terraform Init the Config
     - name: Terraform Init
       id: init
       run: terraform init
