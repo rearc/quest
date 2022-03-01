@@ -13,7 +13,7 @@ terraform {
   cloud {
     organization = "jonathanfinley"
     workspaces {
-      name = "gh-actions"
+      name = "rq"
     }
   }
 }
