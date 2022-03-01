@@ -190,6 +190,9 @@ resource "aws_lb_listener" "rq_https_listen" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.rearc_quest_target_group.arn
   }
+  depends_on = [
+    module.acm
+  ]
 }
 
 ### CERTIFICATE
