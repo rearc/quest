@@ -70,7 +70,7 @@ resource "aws_ecs_service" "rearc_quest" {
 
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.rearc_quest_target_group.arn # Referencing our target group
+    target_group_arn = ["${aws_lb_target_group.rearc_quest_target_group.arn}"] # Referencing our target group
     container_name   = aws_ecs_task_definition.rearc_quest.family
     container_port   = 3000 # Specifying the container port
   }
