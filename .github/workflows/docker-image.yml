@@ -1,4 +1,4 @@
-name: Quest
+name: GHCR
 
 on:
   push:
