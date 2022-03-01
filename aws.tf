@@ -12,7 +12,7 @@ resource "aws_ecs_cluster" "rearc_quest" {
 }
 
 resource "aws_ecs_task_definition" "rearc_quest" {
-  family = "rearc_quest" # Name of task
+  family                = "rearc_quest" # Name of task
   container_definitions = <<DEFINITION
   [
     {
@@ -35,13 +35,13 @@ resource "aws_ecs_task_definition" "rearc_quest" {
   network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
   memory                   = 512         # Specifying the memory our container requires
   cpu                      = 256         # Specifying the CPU our container requires
-  execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
+  execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
 }
 
 # Manage IAM:
 resource "aws_iam_role" "ecsTaskExecutionRole" {
-  name = "ecsTaskExecutionRole"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
+  name               = "ecsTaskExecutionRole"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -56,29 +56,29 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
-  role       = "${aws_iam_role.ecsTaskExecutionRole.name}"
+  role       = aws_iam_role.ecsTaskExecutionRole.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 # Create your Service
 resource "aws_ecs_service" "rearc_quest" {
-  name            = "rearc_quest" # Service Name
-  cluster         = "${aws_ecs_cluster.rearc_quest.id}" # Cluster
-  task_definition = "${aws_ecs_task_definition.rearc_quest.arn}" # Task to Start
+  name            = "rearc_quest"                           # Service Name
+  cluster         = aws_ecs_cluster.rearc_quest.id          # Cluster
+  task_definition = aws_ecs_task_definition.rearc_quest.arn # Task to Start
   launch_type     = "FARGATE"
-  desired_count   = 2 
+  desired_count   = 2
 
 
   load_balancer {
-    target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" # Referencing our target group
-    container_name   = "${aws_ecs_task_definition.rearc_quest.family}"
+    target_group_arn = aws_lb_target_group.rearc_quest_target_group.arn # Referencing our target group
+    container_name   = aws_ecs_task_definition.rearc_quest.family
     container_port   = 3000 # Specifying the container port
   }
 
   network_configuration {
-    subnets = ["${aws_default_subnet.rearc_quest_a.id}", "${aws_default_subnet.rearc_quest_b.id}", "${aws_default_subnet.rearc_quest_c.id}"]
+    subnets          = ["${aws_default_subnet.rearc_quest_a.id}", "${aws_default_subnet.rearc_quest_b.id}", "${aws_default_subnet.rearc_quest_c.id}"]
     assign_public_ip = true
-    security_groups = ["${aws_security_group.rearc_quest_security_group.id}"]
+    security_groups  = ["${aws_security_group.rearc_quest_security_group.id}"]
   }
 }
 
@@ -99,7 +99,7 @@ resource "aws_default_subnet" "rearc_quest_c" {
 }
 
 resource "aws_alb" "rearc_quest_application_load_balancer" {
-  name = "rearc-quest-lb-tf" # Naming our load balancer
+  name               = "rearc-quest-lb-tf" # Naming our load balancer
   load_balancer_type = "application"
   subnets = [ # Referencing the default subnets
     "${aws_default_subnet.rearc_quest_a.id}",
@@ -130,9 +130,9 @@ resource "aws_security_group" "rearc_quest_load_balancer_security_group" {
 
 
   egress {
-    from_port   = 0 # Allowing any incoming port
-    to_port     = 0 # Allowing any outgoing port
-    protocol    = "-1" # Allowing any outgoing protocol 
+    from_port   = 0             # Allowing any incoming port
+    to_port     = 0             # Allowing any outgoing port
+    protocol    = "-1"          # Allowing any outgoing protocol 
     cidr_blocks = ["0.0.0.0/0"] # Allowing traffic out to all IP addresses
   }
 }
@@ -147,9 +147,9 @@ resource "aws_security_group" "rearc_quest_security_group" {
   }
 
   egress {
-    from_port   = 0 # Allowing any incoming port
-    to_port     = 0 # Allowing any outgoing port
-    protocol    = "-1" # Allowing any outgoing protocol 
+    from_port   = 0             # Allowing any incoming port
+    to_port     = 0             # Allowing any outgoing port
+    protocol    = "-1"          # Allowing any outgoing protocol 
     cidr_blocks = ["0.0.0.0/0"] # Allowing traffic out to all IP addresses
   }
 }
@@ -159,15 +159,15 @@ resource "aws_lb_target_group" "rearc_quest_target_group" {
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = "${aws_default_vpc.rearc_quest_vpc.id}"
+  vpc_id      = aws_default_vpc.rearc_quest_vpc.id
   health_check {
     matcher = "200,301,302"
-    path = "/"
+    path    = "/"
   }
 }
 
 resource "aws_lb_listener" "rq_http_listen" {
-  load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
+  load_balancer_arn = aws_alb.rearc_quest_application_load_balancer.arn
   port              = "80"
   protocol          = "HTTP"
   default_action {
@@ -181,14 +181,14 @@ resource "aws_lb_listener" "rq_http_listen" {
 }
 
 resource "aws_lb_listener" "rq_https_listen" {
-  load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
+  load_balancer_arn = aws_alb.rearc_quest_application_load_balancer.arn
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = data.aws_acm_certificate.cert.arn
   default_action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" 
+    target_group_arn = aws_lb_target_group.rearc_quest_target_group.arn
   }
 }
 
@@ -202,7 +202,7 @@ module "acm" {
   version = "~> 3.0"
 
   domain_name = var.cf_domain
-  zone_id = data.cloudflare_zone.domain.id
+  zone_id     = data.cloudflare_zone.domain.id
 
   subject_alternative_names = [
     "*.${var.cf_domain}",
