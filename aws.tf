@@ -234,5 +234,8 @@ resource "cloudflare_record" "validation" {
 
 data "aws_acm_certificate" "cert" {
   domain = var.cf_domain
+  depends_on = [
+    module.acm
+  ]
 }
 
