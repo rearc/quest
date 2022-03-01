@@ -70,48 +70,48 @@ resource "aws_ecs_service" "rearc_quest" {
 
 
   load_balancer {
-    target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" # Referencing our target group
+    target_group_arn = "${aws_lb_target_group.rq_tg.arn}" # Referencing our target group
     container_name   = "${aws_ecs_task_definition.rearc_quest.family}"
     container_port   = 3000 # Specifying the container port
   }
 
   network_configuration {
-    subnets = ["${aws_default_subnet.rearc_quest_a.id}", "${aws_default_subnet.rearc_quest_b.id}", "${aws_default_subnet.rearc_quest_c.id}"]
+    subnets = ["${aws_default_subnet.rq_a.id}", "${aws_default_subnet.rq_b.id}", "${aws_default_subnet.rq_c.id}"]
     assign_public_ip = true
-    security_groups = ["${aws_security_group.rearc_quest_security_group.id}"]
+    security_groups = ["${aws_security_group.rq_sg.id}"]
   }
 }
 
-resource "aws_default_vpc" "rearc_quest_vpc" {
+resource "aws_default_vpc" "rq_vpc" {
 }
 
 # Providing a reference to our default subnets
-resource "aws_default_subnet" "rearc_quest_a" {
+resource "aws_default_subnet" "rq_a" {
   availability_zone = "us-east-2a"
 }
 
-resource "aws_default_subnet" "rearc_quest_b" {
+resource "aws_default_subnet" "rq_b" {
   availability_zone = "us-east-2b"
 }
 
-resource "aws_default_subnet" "rearc_quest_c" {
+resource "aws_default_subnet" "rq_c" {
   availability_zone = "us-east-2c"
 }
 
-resource "aws_alb" "rearc_quest_application_load_balancer" {
+resource "aws_alb" "rq_alb" {
   name = "rearc-quest-lb-tf" # Naming our load balancer
   load_balancer_type = "application"
   subnets = [ # Referencing the default subnets
-    "${aws_default_subnet.rearc_quest_a.id}",
-    "${aws_default_subnet.rearc_quest_b.id}",
-    "${aws_default_subnet.rearc_quest_c.id}"
+    "${aws_default_subnet.rq_a.id}",
+    "${aws_default_subnet.rq_b.id}",
+    "${aws_default_subnet.rq_c.id}"
   ]
   # Referencing the security group
-  security_groups = ["${aws_security_group.rearc_quest_load_balancer_security_group.id}"]
+  security_groups = ["${aws_security_group.rq_lb_sg.id}"]
 }
 
 # Creating a security group for the load balancer:
-resource "aws_security_group" "rearc_quest_load_balancer_security_group" {
+resource "aws_security_group" "rq_lb_sg" {
   ingress {
     description = "allow port 80"
     from_port   = 80 # Allowing traffic in from port 80
@@ -137,13 +137,13 @@ resource "aws_security_group" "rearc_quest_load_balancer_security_group" {
   }
 }
 
-resource "aws_security_group" "rearc_quest_security_group" {
+resource "aws_security_group" "rq_sg" {
   ingress {
     from_port = 0
     to_port   = 0
     protocol  = "-1"
     # Only allowing traffic in from the load balancer security group
-    security_groups = ["${aws_security_group.rearc_quest_load_balancer_security_group.id}"]
+    security_groups = ["${aws_security_group.rq_lb_sg.id}"]
   }
 
   egress {
@@ -154,20 +154,20 @@ resource "aws_security_group" "rearc_quest_security_group" {
   }
 }
 
-resource "aws_lb_target_group" "rearc_quest_target_group" {
+resource "aws_lb_target_group" "rq_tg" {
   name        = "rearc-quest-target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = "${aws_default_vpc.rearc_quest_vpc.id}"
+  vpc_id      = "${aws_default_vpc.rq_vpc.id}"
   health_check {
     matcher = "200,301,302"
     path = "/"
   }
 }
 
-resource "aws_lb_listener" "rearc_quest_listener" {
-  load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
+resource "aws_lb_listener" "rq_listen_http" {
+  load_balancer_arn = "${aws_alb.rq_alb.arn}"
   port              = "80"
   protocol          = "HTTP"
   default_action {
@@ -180,15 +180,15 @@ resource "aws_lb_listener" "rearc_quest_listener" {
   }
 }
 
-resource "aws_lb_listener" "rearc_quest_listener_https" {
-  load_balancer_arn = "${aws_alb.rearc_quest_application_load_balancer.arn}"
+resource "aws_lb_listener" "rq_listen_https" {
+  load_balancer_arn = "${aws_alb.rq_alb.arn}"
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = data.aws_acm_certificate.cert.arn
   default_action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.rearc_quest_target_group.arn}" 
+    target_group_arn = "${aws_lb_target_group.rq_tg.arn}" 
   }
   depends_on = [
     module.acm

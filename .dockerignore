@@ -1,2 +1,13 @@
 node_modules
 npm-debug.log
+.git
+.gitignore
+
+# Compiled files
+**/.terraform/*
+**/.terragrunt-cache/*
+*.tfstate
+*.tfstate.*
+
+# Module directory
+.terraform
