@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source="https://github.com/jonfinley/quest"
 # APP DIRECTORY
 #WORKDIR /usr/src/app
 
-ENV SECRET_WORD=TwelveFactor
+ENV SECRET_WORD=TwelveFactor 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
