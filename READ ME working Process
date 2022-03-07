@@ -1,0 +1,41 @@
+
+
+1. Cloned to my new Git Repository QUESTREPO.
+
+2. Created a Dockerfile. Used Node:12
+      Injected Enivornment variable ENV SECRET_WORD=Debug
+
+3. Build Docker Image "imagequest". The output below appeared after running.
+       Rearc quest listening on port 3000!
+
+4. Registered Image to ECR. Tagged the version.
+
+5. Created Cluster and Task Definition in ECS. 
+      Container definition included port 3000
+
+6. Run Service "ServiceQuest" and attached an ALB and autoscaling group.
+     i.e configured security group to accecpt incoming traffic.
+
+7. Created Cerificate in ACM, attched CName in Route 53.
+	A-Routes Traffic to Application load balancer
+	configured security group in Cluster to accept traffic.
+
+SHORTCOMINGS.
+Tried to inject the environment variable while the Container was running.
+But that did not work with ECR.
+
+Initially ran the container in docker. Created an instance and ssh (connected) to it.
+But that didn't seen feasible, i.e for attaching an ALB and for scaling purposes.
+Then tried ECS, which seemed better.
+
+Tried both Fargate and EC2 mode. While using Fargate, the load balancer did not appear on the website.
+Hence i used EC2 insatance.
+
+
+Given More Time, i would try an use IAC to create ECS and have better documentation.
+I would also try and customs the resources used for better performace.
+
+
+
+Please find screenshots attached below and don't hesistate to connect me for further information.
+Thank you.
