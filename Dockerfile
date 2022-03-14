@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Pass a command to the container to start our application
-CMD [ "node", "server.js" ]
+CMD [ "npm", "run", "start" ]
