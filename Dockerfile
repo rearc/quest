@@ -15,7 +15,7 @@ COPY . .
 
 # TODO: Make this utilize an env variable
 # Make our port that our app uses accessible
-EXPOSE 80
+EXPOSE 3000
 
 # Pass a command to the container to start our application
 CMD [ "node", "server.js" ]
