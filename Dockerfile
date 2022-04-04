@@ -1,5 +1,7 @@
 FROM node:16
 
+ENV SECRET_WORD=TwelveFactor
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
