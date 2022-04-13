@@ -4,7 +4,7 @@
 
 It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. Quest is a webapp made with node.js and golang.
 
-### Q. So what skills should i have ?
+### Q. So what skills should I have ?
 Public cloud (AWS, GCP, Azure). More than one cloud is a "good to have" but one is a "must have". General cloud concepts, especially networking. Docker (containerization). IaC (Infrastructure as code). Linux/Unix. Git. TLS certs is a plus.
 
 ### Q. What do I have to do ?
@@ -56,7 +56,7 @@ If you _want_ to host it longer for us to view it, we recommend taking a screens
 We have many more for you to solve as a member of the Rearc team!
 
 ### Q. What if I find a bug?
-Awesome! Tell us you found a bug alongwith your submission and we'll talk more!
+Awesome! Tell us you found a bug along with your submission and we'll talk more!
 
 ### Q. What if I fail?
 There is no fail. Complete whatever you can and then submit your work. Doing _everything_ in the quest is not a guarantee that you will "pass" the quest, just like not doing something is not a guarantee you will "fail" the quest.
