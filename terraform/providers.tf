@@ -16,7 +16,7 @@ provider "aws" {
   default_tags {
     tags = {
       Application = "Quest"
-      Comment     = "Made by benniemosher."
+      Comment     = "Made by benniemosher via Terraform."
       Company     = "Rearc"
     }
   }
