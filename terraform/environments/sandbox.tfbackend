@@ -1,0 +1,7 @@
+bucket         = "benniemosher-terraform-states"
+dynamodb_table = "benniemosher-terraform-locks"
+encrypt        = true
+# key            = "<DEPARTMENT>/<FUNCTION>/<APPLICATION>/terraform.tfstate"
+key     = "benniemosher-quest-sandbox/terraform.tfstate"
+profile = "benniemosher-quest-sandbox"
+region  = "us-east-1"
