@@ -18,7 +18,32 @@ resource "aws_ecs_cluster" "this" {
   }
 }
 
+resource "aws_ecs_task_definition" "this" {
+  family = var.config.cluster-name
+  # TODO: Make this use a task-definition.tfpl file and check for one being passed in
+  container_definitions = jsonencode([
+    {
+      name      = var.config.cluster-name
+      image     = var.config.cluster-name
+      cpu       = var.config.task-definition-cpu
+      memory    = var.config.task-definition-memory
+      essential = true
+      portMappings = [
+        {
+          containerPort = var.config.task-definition-container-port
+          hostPort      = var.config.task-definition-host-port
+        }
+      ]
+    },
+  ])
+  requires_compatibilities = var.config.launch-type
+  network_mode             = var.config.task-definition-network-mode
+  memory                   = var.config.task-definition-memory
+  cpu                      = var.config.task-definition-cpu
+  execution_role_arn       = aws_iam_role.ecs-task-execution.arn
+}
+
+
 # TODO: Create an ECS Service
 # TODO: Create a VPC
-# TODO: Create a task definition
 # TODO: Create an ALB

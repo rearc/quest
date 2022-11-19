@@ -1,0 +1,15 @@
+[
+  {
+    "name": ${container-name},
+    "image": ${image-url},
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": ${container-port},
+        "hostPort": ${host-port}
+      }
+    ],
+    "memory": ${memory},
+    "cpu": ${cpu}
+  }
+]
