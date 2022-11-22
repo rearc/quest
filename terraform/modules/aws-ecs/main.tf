@@ -60,9 +60,9 @@ resource "aws_ecs_service" "this" {
     # subnets          = var.config.subnets
     # TODO: Try var.config.subnets
     subnets = [
-      aws_default_subnet.default_subnet_a.id,
-      aws_default_subnet.default_subnet_b.id,
-      aws_default_subnet.default_subnet_c.id
+      aws_default_subnet.a.id,
+      aws_default_subnet.b.id,
+      aws_default_subnet.c.id
     ]
     assign_public_ip = var.config.assign-public-ip
     # TODO: try(var.config.security-groups)

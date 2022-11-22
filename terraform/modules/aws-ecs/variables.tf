@@ -18,5 +18,6 @@ variable "config" {
     # subnets                        = optional(list(string), null)
     assign-public-ip = optional(bool, true)
     # security-groups                = optional(list(string), [])
+    load-balancer-type = optional(string, "application")
   })
 }
