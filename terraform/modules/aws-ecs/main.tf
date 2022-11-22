@@ -50,11 +50,11 @@ resource "aws_ecs_service" "this" {
   launch_type     = var.config.launch-type
   desired_count   = var.config.ecs-service-count
 
-  # load_balancer {
-  #   target_group_arn = aws_lb_target_group.target_group.arn
-  #   container_name   = aws_ecs_task_definition.quest_task.family
-  #   container_port   = 3000
-  # }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.this.arn
+    container_name   = aws_ecs_task_definition.this.family
+    container_port   = 3000
+  }
 
   network_configuration {
     # subnets          = var.config.subnets
