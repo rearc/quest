@@ -2,6 +2,7 @@ variable "config" {
   description = "The config to create the ECS cluster with."
   type = object({
     cluster-name                   = string
+    image-url                      = string
     kms-key-arn                    = optional(string, null)
     logging-command-configuration  = optional(string, "OVERRIDE")
     cloud-watch-encryption-enabled = optional(bool, true)

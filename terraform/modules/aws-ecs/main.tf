@@ -23,8 +23,9 @@ resource "aws_ecs_task_definition" "this" {
   # TODO: Make this use a task-definition.tfpl file and check for one being passed in
   container_definitions = jsonencode([
     {
-      name      = var.config.cluster-name
-      image     = "${var.config.cluster-name}:latest"
+      name = var.config.cluster-name
+      # image     = "${var.config.cluster-name}:latest"
+      image     = "${var.config.image-url}:latest"
       cpu       = var.config.task-definition-cpu
       memory    = var.config.task-definition-memory
       essential = true
