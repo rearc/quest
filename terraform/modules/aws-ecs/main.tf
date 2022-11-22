@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = var.config.cluster-name
-      image     = var.config.cluster-name
+      image     = "${var.config.cluster-name}:latest"
       cpu       = var.config.task-definition-cpu
       memory    = var.config.task-definition-memory
       essential = true
