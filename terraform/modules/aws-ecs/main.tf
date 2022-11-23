@@ -59,13 +59,7 @@ resource "aws_ecs_service" "this" {
   }
 
   network_configuration {
-    # subnets          = var.config.subnets
-    # TODO: Try var.config.subnets
-    subnets = [
-      aws_default_subnet.a.id,
-      aws_default_subnet.b.id,
-      aws_default_subnet.c.id
-    ]
+    subnets          = var.config.subnets
     assign_public_ip = var.config.assign-public-ip
     # TODO: try(var.config.security-groups)
     security_groups = [
@@ -74,4 +68,18 @@ resource "aws_ecs_service" "this" {
   }
 }
 
-# TODO: Create an ALB
+resource "aws_security_group" "service" {
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    from_port       = 0
+    protocol        = "-1"
+    security_groups = ["${aws_security_group.load-balancer.id}"]
+    to_port         = 0
+  }
+}

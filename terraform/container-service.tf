@@ -10,6 +10,8 @@ module "container-service" {
       }
     ]
     image-url = module.container-registry.url
+    subnets   = module.network.subnets
+    vpc       = module.network.vpc
   }
 }
 

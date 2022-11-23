@@ -1,25 +1,25 @@
 variable "config" {
   description = "The config to create the ECS cluster with."
   type = object({
-    cluster-name                   = string
-    image-url                      = string
-    kms-key-arn                    = optional(string, null)
-    logging-command-configuration  = optional(string, "OVERRIDE")
+    # security-groups                = optional(list(string), [])
+    subnets                        = list(string)
+    vpc                            = string
+    assign-public-ip               = optional(bool, true)
     cloud-watch-encryption-enabled = optional(bool, true)
     cloud-watch-log-group-name     = optional(bool, null)
-    task-definition-file           = optional(string, null)
-    launch-type                    = optional(string, "FARGATE")
-    task-definition-network-mode   = optional(string, "awsvpc")
-    task-definition-memory         = optional(number, 512)
-    task-definition-cpu            = optional(number, 256)
-    task-definition-container-port = optional(number, 3000)
-    task-definition-host-port      = optional(number, 3000)
+    cluster-name                   = string
     ecs-service-count              = optional(number, 1)
-    # vpc                            = optional(object, null)
-    # subnets                        = optional(list(string), null)
-    assign-public-ip = optional(bool, true)
-    # security-groups                = optional(list(string), [])
-    load-balancer-type = optional(string, "application")
-    environment        = optional(list(any), null)
+    environment                    = optional(list(any), null)
+    image-url                      = string
+    kms-key-arn                    = optional(string, null)
+    launch-type                    = optional(string, "FARGATE")
+    load-balancer-type             = optional(string, "application")
+    logging-command-configuration  = optional(string, "OVERRIDE")
+    task-definition-container-port = optional(number, 3000)
+    task-definition-cpu            = optional(number, 256)
+    task-definition-file           = optional(string, null)
+    task-definition-host-port      = optional(number, 3000)
+    task-definition-memory         = optional(number, 512)
+    task-definition-network-mode   = optional(string, "awsvpc")
   })
 }
