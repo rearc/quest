@@ -2,6 +2,6 @@ module "container-registry" {
   source = "./modules/aws-ecr"
 
   config = {
-    repository-name = "benniemosher-rearc-quest"
+    repository-name = local.project-name
   }
 }

@@ -2,10 +2,11 @@ module "dns-records" {
   source = "./modules/cloudflare-dns-record"
 
   config = {
-    root-domain-name = "benniemosher.dev"
+    root-domain-name = local.domain-name
     dns-record = {
-      name  = "quest"
-      value = module.load-balancer.load-balancer-dns
+      name    = local.sub-domain-name
+      proxied = true
+      value   = module.load-balancer.load-balancer-dns
     }
   }
 }

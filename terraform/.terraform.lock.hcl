@@ -16,3 +16,10 @@ provider "registry.terraform.io/hashicorp/aws" {
     "h1:YlsYrKClET1k7WDshRwEnB8slVJBuMHQum8K5owL+p4=",
   ]
 }
+
+provider "registry.terraform.io/hashicorp/null" {
+  version = "3.2.1"
+  hashes = [
+    "h1:ydA0/SNRVB1o95btfshvYsmxA+jZFRZcvKzZSB+4S1M=",
+  ]
+}
