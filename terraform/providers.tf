@@ -4,6 +4,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.40"
     }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 3.0"
+    }
   }
 
   required_version = "~> 1.3"
@@ -20,4 +25,9 @@ provider "aws" {
       Company     = "Rearc"
     }
   }
+}
+
+provider "cloudflare" {
+  account_id = var.cloudflare-config.account-id
+  api_token  = var.cloudflare-config.api-token
 }

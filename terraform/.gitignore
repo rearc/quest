@@ -40,3 +40,5 @@ terraform.rc
 
 .infracost
 infracost.json
+
+**/*.auto.tfvars
