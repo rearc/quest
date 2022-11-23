@@ -3,5 +3,9 @@ module "dns-records" {
 
   config = {
     root-domain-name = "benniemosher.dev"
+    dns-record = {
+      name  = "quest"
+      value = module.load-balancer.load-balancer-dns
+    }
   }
 }
