@@ -3,7 +3,13 @@ module "container-service" {
 
   config = {
     cluster-name = "benniemosher-rearc-quest"
-    image-url    = module.container-registry.url
+    environment = [
+      {
+        name  = "SECRET_WORD"
+        value = "Midi-chlorians"
+      }
+    ]
+    image-url = module.container-registry.url
   }
 }
 

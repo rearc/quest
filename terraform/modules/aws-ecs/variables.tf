@@ -20,5 +20,6 @@ variable "config" {
     assign-public-ip = optional(bool, true)
     # security-groups                = optional(list(string), [])
     load-balancer-type = optional(string, "application")
+    environment        = optional(list(any), null)
   })
 }
