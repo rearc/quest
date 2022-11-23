@@ -35,6 +35,12 @@ resource "aws_ecs_task_definition" "this" {
           hostPort      = var.config.task-definition-host-port
         }
       ]
+      environment = [
+        {
+          name = "SECRET_WORD"
+          value = "Midi-chlorians"
+        }
+      ]
     },
   ])
   requires_compatibilities = [var.config.launch-type]
