@@ -53,7 +53,7 @@ resource "aws_ecs_service" "this" {
   desired_count   = var.config.ecs-service-count
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = var.config.load-balancer-target-group
     container_name   = aws_ecs_task_definition.this.family
     container_port   = 3000
   }
@@ -63,23 +63,7 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = var.config.assign-public-ip
     # TODO: try(var.config.security-groups)
     security_groups = [
-      aws_security_group.service.id
+      var.config.ecs-security-group
     ]
-  }
-}
-
-resource "aws_security_group" "service" {
-  egress {
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 0
-    protocol    = "-1"
-    to_port     = 0
-  }
-
-  ingress {
-    from_port       = 0
-    protocol        = "-1"
-    security_groups = ["${aws_security_group.load-balancer.id}"]
-    to_port         = 0
   }
 }

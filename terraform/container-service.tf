@@ -9,12 +9,10 @@ module "container-service" {
         value = "Midi-chlorians"
       }
     ]
-    image-url = module.container-registry.url
-    subnets   = module.network.subnets
-    vpc       = module.network.vpc
+    image-url                  = module.container-registry.url
+    load-balancer-target-group = module.load-balancer.load-balancer-target-group
+    ecs-security-group         = module.load-balancer.ecs-security-group
+    subnets                    = module.network.subnets
+    vpc                        = module.network.vpc
   }
-}
-
-output "dns" {
-  value = module.container-service.alb-dns
 }
