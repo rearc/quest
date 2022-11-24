@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "vpc-flow-logs" {
     ]
 
     resources = [
-      aws_cloudwatch_log_group.default-vpc.arn
+      module.default-vpc-flow-logs.log-group.arn
     ]
   }
 }

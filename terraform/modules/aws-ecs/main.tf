@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "this" {
 
       log_configuration {
         cloud_watch_encryption_enabled = var.config.cloudwatch-encryption-enabled
-        cloud_watch_log_group_name     = module.logs.log-group-name
+        cloud_watch_log_group_name     = module.logs.log-group.name
       }
     }
   }
