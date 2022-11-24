@@ -52,7 +52,7 @@ jobs:
         # if: steps.cache-infracost-base-json.outputs.cache-hit != 'true'
 
       - name: Get Cloudflare tfvars
-        uses: benniemosher/action-get-keybase-secret@master
+        uses: benniemosher/action-get-keybase-secret@bam/fix-file-location
         if: ${{ inputs.get_cloudflare_tfvars == true }}
         with:
           repo: keybase://private/benniemosher/secrets
