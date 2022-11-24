@@ -1,0 +1,52 @@
+## To Apply:
+
+Due to a race condition with cloudflare and acm validation, currently you need
+to run the following command first followed by a `terraform apply`.
+
+```bash
+tf apply -target='module.certificate.aws_acm_certificate.this'
+```
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.40 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 3.0 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_certificate"></a> [certificate](#module\_certificate) | ./modules/aws-acm | n/a |
+| <a name="module_container-registry"></a> [container-registry](#module\_container-registry) | ./modules/aws-ecr | n/a |
+| <a name="module_container-service"></a> [container-service](#module\_container-service) | ./modules/aws-ecs | n/a |
+| <a name="module_dns-records"></a> [dns-records](#module\_dns-records) | ./modules/cloudflare-dns-record | n/a |
+| <a name="module_load-balancer"></a> [load-balancer](#module\_load-balancer) | ./modules/aws-loadbalancer | n/a |
+| <a name="module_network"></a> [network](#module\_network) | ./modules/aws-network | n/a |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_aws-profile"></a> [aws-profile](#input\_aws-profile) | The local AWS profile with access to the service account | `string` | `"benniemosher-quest-sandbox"` | no |
+| <a name="input_cloudflare-config"></a> [cloudflare-config](#input\_cloudflare-config) | The config to connect Terraform to Cloudflare | <pre>object({<br>    account-id = optional(string, null)<br>    api-token  = string<br>  })</pre> | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | The AWS region in which to stand up resources | `string` | `"us-east-1"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_load-balancer-dns"></a> [load-balancer-dns](#output\_load-balancer-dns) | The Load Balancer DNS name to reach the deployed web app. |
+| <a name="output_url"></a> [url](#output\_url) | The URL for the web app. |
+<!-- END_TF_DOCS -->
