@@ -6,9 +6,9 @@ on:
   pull_request:
 
 jobs:
-  # lint:
-  #   name: Lint
-  #   uses: ./.github/workflows/lint.yml
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
 
   # sec:
   #   name: Sec
