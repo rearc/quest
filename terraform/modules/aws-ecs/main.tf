@@ -3,11 +3,11 @@ resource "aws_ecs_cluster" "this" {
 
   configuration {
     execute_command_configuration {
-      kms_key_id = local.kms-key-arn
+      kms_key_id = var.config.kms-key-arn
       logging    = var.config.logging-command-configuration
 
       log_configuration {
-        cloud_watch_encryption_enabled = var.config.cloud-watch-encryption-enabled
+        cloud_watch_encryption_enabled = var.config.cloudwatch-encryption-enabled
         cloud_watch_log_group_name     = local.cloudwatch-log-group-name
       }
     }
