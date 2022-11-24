@@ -29,7 +29,7 @@ resource "aws_ecs_cluster" "this" {
   }
 
   tags = {
-    "Name" = var.config.cluster-name
+    Name = var.config.cluster-name
   }
 }
 

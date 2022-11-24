@@ -5,7 +5,7 @@ resource "aws_kms_key" "this" {
   policy                  = var.config.policy
 
   tags = {
-    "Name" = var.config.name
+    Name = var.config.name
   }
 }
 

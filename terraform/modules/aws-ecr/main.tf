@@ -12,7 +12,7 @@ resource "aws_ecr_repository" "this" {
   name                 = var.config.repository-name
 
   tags = {
-    "Name" = var.config.repository-name
+    Name = var.config.repository-name
   }
 }
 
