@@ -8,15 +8,15 @@ on:
 jobs:
   # lint:
   #   name: Lint
-  #   uses: ./.github/workflows/tflint.yml
+  #   uses: ./.github/workflows/lint.yml
 
-  # tfsec:
-  #   name: TFSec
-  #   uses: ./.github/workflows/tfsec.yml
+  # sec:
+  #   name: Sec
+  #   uses: ./.github/workflows/sec.yml
 
-  infracost:
-    name: Infracost
-    uses: ./.github/workflows/infracost.yml
+  Cost:
+    name: Cost
+    uses: ./.github/workflows/cost.yml
     with:
       get_cloudflare_tfvars: true
     secrets:
