@@ -28,6 +28,6 @@ provider "aws" {
 }
 
 provider "cloudflare" {
-  account_id = var.cloudflare-config.account-id
-  api_token  = var.cloudflare-config.api-token
+  # account_id = var.cloudflare-config.account-id
+  api_token = var.cloudflare-config.api-token
 }
