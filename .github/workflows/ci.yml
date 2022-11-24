@@ -10,9 +10,11 @@ jobs:
     name: Lint
     uses: ./.github/workflows/lint.yml
 
-  # sec:
-  #   name: Sec
-  #   uses: ./.github/workflows/sec.yml
+  sec:
+    name: Sec
+    uses: ./.github/workflows/sec.yml
+    secrets:
+      GITHUB_PAT: ${{ secrets.GH_PAT }}
 
   Cost:
     name: Cost
