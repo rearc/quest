@@ -6,8 +6,8 @@ on:
         required: true
 
 jobs:
-  tfsec:
-    name: TFSec
+  sec:
+    name: Sec
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -33,11 +33,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_PAT }}
           tfsec_formats: sarif
 
-      # TODO: This requires Code Scanning to be turned on,
-      #       and that requires either the repo being OSS,
-      #       or we have to contact sales.
-      # - name: Upload SARIF file
-      #   uses: github/codeql-action/upload-sarif@v1
-      #   with:
-      #     # Path to SARIF file relative to the root of the repository
-      #     sarif_file: tfsec.sarif
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: tfsec.sarif
