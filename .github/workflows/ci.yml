@@ -16,7 +16,7 @@ jobs:
 
   infracost:
     name: Infracost
-    uses: ./infracost.yml@main
+    uses: infracost.yml@main
     with:
       get_cloudflare_tfvars: true
     secrets:
