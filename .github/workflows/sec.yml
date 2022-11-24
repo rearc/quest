@@ -28,8 +28,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_PAT }}
           tfsec_formats: sarif
 
-      - run: ls -la
-
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
