@@ -1,3 +1,5 @@
+# TODO: Move the Load Balancer to internal and remove this comment
+# tfsec:ignore:aws-elb-alb-not-public
 module "load-balancer" {
   source = "./modules/aws-loadbalancer"
 
