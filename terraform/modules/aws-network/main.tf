@@ -1,10 +1,3 @@
-# TODO: Secure the default VPC
-resource "aws_default_vpc" "this" {
-  tags = {
-    Name = "Default VPC"
-  }
-}
-
 # TODO: Use data resource to loop over available availability zones
 resource "aws_default_subnet" "a" {
   availability_zone = "us-east-1a"
