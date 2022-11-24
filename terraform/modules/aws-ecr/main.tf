@@ -8,7 +8,7 @@ resource "aws_ecr_repository" "this" {
     scan_on_push = var.config.scan-images-on-push
   }
 
-  image_tag_mutability = var.config.image-tag-mutability
+  image_tag_mutability = "IMMUTABLE"
   name                 = var.config.repository-name
 
   tags = {
