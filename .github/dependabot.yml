@@ -9,4 +9,12 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: ".github/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "terraform"
+    directory: "terraform/"
+    schedule:
+      interval: "weekly"
 
