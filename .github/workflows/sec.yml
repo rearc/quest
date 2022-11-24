@@ -19,6 +19,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: TFSec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.0
+        with:
+          sarif_file: results.sarif.json
+
       # SEE: https://github.com/aquasecurity/tfsec-pr-commenter-action
       # This currently can not find the PR to comment on
       - name: TFSec PR Commenter
