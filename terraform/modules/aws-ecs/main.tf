@@ -13,6 +13,21 @@ resource "aws_ecs_cluster" "this" {
     }
   }
 
+  dynamic "setting" {
+    for_each = var.config.cluster-settings
+    iterator = setting
+
+    content {
+      name  = setting.value.name
+      value = setting.value.value
+    }
+  }
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
   tags = {
     "Name" = var.config.cluster-name
   }
