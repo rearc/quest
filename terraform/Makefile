@@ -71,4 +71,4 @@ lint: ## Lints Terraform. Runs automatically with validate
 	tflint --enable-plugin=aws
 
 sec: ## Verifies security of Terraform resources. Runs automatically with validate
-	tfsec .
+	tfsec . --tfvars-file cloudflare.auto.tfvars
