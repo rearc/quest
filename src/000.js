@@ -1,6 +1,15 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const ratelimit = require('express-rate-limit')
+
+const limiter = new ratelimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 100
+})
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 app.get('/', function (req, res) {
 const { exec } = require('child_process');
