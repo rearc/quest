@@ -23,7 +23,7 @@ resource "aws_security_group" "load-balancer" {
   }
 
   ingress {
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.config.allowed-ingress-cidrs
     description = "All ingress on port 80 for the Load Balancer."
     from_port   = 80
     protocol    = "tcp"
