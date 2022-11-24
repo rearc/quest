@@ -1,0 +1,25 @@
+name: Continuous Integration (CI)
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  # lint:
+  #   name: Lint
+  #   uses: ./tflint.yml@main
+
+  # tfsec:
+  #   name: TFSec
+  #   uses: ./tfsec.yml@main
+
+  infracost:
+    name: Infracost
+    uses: ./infracost.yml@main
+    with:
+      get_cloudflare_tfvars: true
+    secrets:
+      INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+      KEYBASE_USER: ${{ secrets.KEYBASE_USER }}
+      KEYBASE_PAPERKEY: ${{ secrets.KEYBASE_PAPERKEY }}
