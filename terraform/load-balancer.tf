@@ -1,5 +1,6 @@
 # TODO: Move the Load Balancer to internal and remove this comment
-# tfsec:ignore:aws-elb-alb-not-public
+# TODO: Restrict the egress CIDR blocks to only required IPS, or remove all egress access
+# tfsec:ignore:aws-elb-alb-not-public tfsec:ignore:aws-ec2-no-public-egress-sgr
 module "load-balancer" {
   source = "./modules/aws-loadbalancer"
 
