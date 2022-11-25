@@ -10,6 +10,8 @@ Bennie Mosher
 
 > NOTE: The first time the secret word is displayed it uses the default "TwelveFactor" secret word, not the environment variable that you pass in to the Task Definition.
 
+> NOTE: I updated src/000.js and we probably want to get that into a single PR that is imported into the main quest repo
+
 ![Bennie's Quest](quest.png)
 
 ## Given More Time I'd:
