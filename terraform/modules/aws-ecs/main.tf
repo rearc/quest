@@ -34,30 +34,45 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family = var.config.cluster-name
   # TODO: Make this use a task-definition.tfpl file and check for one being passed in
   container_definitions = jsonencode([
     {
-      name = var.config.cluster-name
-      # image     = "${var.config.cluster-name}:latest"
-      image     = "${var.config.image-url}:latest"
-      cpu       = var.config.task-definition-cpu
-      memory    = var.config.task-definition-memory
-      essential = true
+      cpu         = var.config.task-definition-cpu
+      environment = var.config.environment
+      essential   = true
+      image       = "${var.config.image-url}:latest"
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.config.cluster-name}"
+          awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+      memory = var.config.task-definition-memory
+      name   = var.config.cluster-name
       portMappings = [
         {
           containerPort = var.config.task-definition-container-port
           hostPort      = var.config.task-definition-host-port
+          protocol      = "tcp"
         }
       ]
-      environment = var.config.environment
     },
   ])
-  requires_compatibilities = [var.config.launch-type]
-  network_mode             = var.config.task-definition-network-mode
-  memory                   = var.config.task-definition-memory
+
   cpu                      = var.config.task-definition-cpu
   execution_role_arn       = aws_iam_role.ecs-task-execution.arn
+  family                   = var.config.cluster-name
+  memory                   = var.config.task-definition-memory
+  network_mode             = var.config.task-definition-network-mode
+  requires_compatibilities = [var.config.launch-type]
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+  }
+
+  task_role_arn = aws_iam_role.ecs-task-execution.arn
 }
 
 resource "aws_ecs_service" "this" {
@@ -76,7 +91,6 @@ resource "aws_ecs_service" "this" {
   network_configuration {
     subnets          = var.config.subnets
     assign_public_ip = var.config.assign-public-ip
-    # TODO: try(var.config.security-groups)
     security_groups = [
       var.config.ecs-security-group
     ]

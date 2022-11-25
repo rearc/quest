@@ -32,5 +32,7 @@ No requirements.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_arn"></a> [arn](#output\_arn) | The arn of the certificate created. |
 <!-- END_TF_DOCS -->

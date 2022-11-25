@@ -5,6 +5,7 @@ module "load-balancer" {
 
   config = {
     allowed-ingress-cidrs = var.cloudflare-config.cidrs
+    certificate           = module.certificate.arn
     cluster-name          = local.project-name
     vpc                   = module.network.vpc
     subnets               = module.network.subnets
