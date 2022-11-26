@@ -1,5 +1,5 @@
 # TODO: Move the Load Balancer to internal
-# tfsec:ignore:aws-elb-alb-not-public 
+# tfsec:ignore:aws-elb-alb-not-public tfsec:ignore:aws-ec2-no-public-ingress-sgr
 module "load-balancer" {
   source = "./modules/aws-loadbalancer"
 
