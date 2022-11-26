@@ -19,9 +19,10 @@ jobs:
   Cost:
     name: Cost
     uses: ./.github/workflows/cost.yml
-    with:
-      get_cloudflare_tfvars: true
+    # with:
+      # get_cloudflare_tfvars: true
     secrets:
       INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-      KEYBASE_USERNAME: ${{ secrets.KEYBASE_USERNAME }}
-      KEYBASE_PAPERKEY: ${{ secrets.KEYBASE_PAPERKEY }}
+      CLOUDFLARE_CONFIG: ${{ secrets.CLOUDFLARE_CONFIG }}
+      # KEYBASE_USERNAME: ${{ secrets.KEYBASE_USERNAME }}
+      # KEYBASE_PAPERKEY: ${{ secrets.KEYBASE_PAPERKEY }}
