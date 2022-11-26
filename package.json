@@ -7,7 +7,7 @@
     "start": "node src/000.js"
   },
   "dependencies": {
-    "express": "~4.16.3",
+    "express": "~4.18.2",
     "express-rate-limit": "^6.7.0"
   },
   "keywords": [],
