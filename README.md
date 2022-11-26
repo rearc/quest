@@ -10,7 +10,9 @@ Bennie Mosher
 
 > NOTE: The first time the secret word is displayed it uses the default "TwelveFactor" secret word, not the environment variable that you pass in to the Task Definition.
 
-> NOTE: I updated src/000.js and we probably want to get that into a single PR that is imported into the main quest repo
+> NOTE: I updated src/000.js to meet CodeQL requirements and we probably want to get that into a single PR that is imported into the main quest repo
+
+> NOTE: Dependabot suggested that we updated express to 4.18.2
 
 ![Bennie's Quest](quest.png)
 
