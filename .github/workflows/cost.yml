@@ -82,6 +82,8 @@ jobs:
           restore-keys: infracost-terraform-modules-${{ runner.os }}-
         if: steps.cache-infracost-base-json.outputs.cache-hit != 'true'
 
+      - run: ls -la ${TF_ROOT}
+
       # Generate Infracost JSON file as the baseline.
       - name: Generate Infracost cost estimate baseline
         run: |
