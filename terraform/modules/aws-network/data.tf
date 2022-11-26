@@ -1,3 +1,7 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 data "aws_iam_policy_document" "vpc-flow-logs" {
   statement {
     actions = [

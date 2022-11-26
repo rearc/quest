@@ -1,10 +1,6 @@
 output "subnets" {
   description = "The subnet IDs created for the network."
-  value = [
-    aws_default_subnet.a.id,
-    aws_default_subnet.b.id,
-    aws_default_subnet.c.id,
-  ]
+  value       = [for az in aws_default_subnet.this : az.id]
 }
 
 output "vpc" {

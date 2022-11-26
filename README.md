@@ -30,7 +30,7 @@ Bennie Mosher
 - [ ] Add lifecycle policy to the ECR
 - [ ] Add replication configuration to the ECR
 - [ ] Use a tfpl template file for the task definition
-- [ ] Use the data.aws_availability_zones to make subnets
+- [x] Use the data.aws_availability_zones to make subnets
 - [ ] Add encryption to resources like aws_ecr_repository and others for security
 - [ ] Add any logging to any resources for observability
 - [ ] Implement something like Data Dog or New Relic for observability as well
