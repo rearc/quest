@@ -1,0 +1,151 @@
+name: Cost
+
+on:
+  workflow_call:
+    # inputs:
+    #   get_cloudflare_tfvars:
+    #     required: false
+    #     type: boolean
+    #     default: false
+    secrets:
+      INFRACOST_API_KEY:
+        required: true
+      # GIT_SSH_KEY:
+      #   required: true
+      # KEYBASE_USERNAME:
+      #   required: true
+      # KEYBASE_PAPERKEY:
+      #   required: true
+      CLOUDFLARE_CONFIG:
+        required: true
+
+# env:
+    # If you use private modules you'll need this env variable to use
+    # the same ssh-agent socket value across all jobs & steps.
+    # SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+jobs:
+  cost:
+    name: Cost
+    runs-on: ubuntu-latest
+    env:
+      TF_ROOT: ./terraform
+
+    steps:
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v2
+        # See https://github.com/infracost/actions/tree/master/setup for other inputs
+        # If you can't use this action, see Docker images in https://infracost.io/cicd
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Cache the Infracost baseline JSON result
+        id: cache-infracost-base-json
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/infracost-base.json'
+          key: infracost-base-json-${{ runner.os }}-${{ github.event.pull_request.base.sha || github.sha }}
+
+      # Checkout the base branch of the pull request (e.g. main/master).
+      - name: Checkout base branch
+        uses: actions/checkout@v2
+        with:
+          ref: '${{ github.event.pull_request.base.ref }}'
+        # if: steps.cache-infracost-base-json.outputs.cache-hit != 'true'
+
+      - name: Configure Cloudflare Secrets
+        run: 'echo "$CLOUDFLARE_CONFIG" > ${TF_ROOT}/cloudflare.auto.tfvars'
+        shell: bash
+        env:
+          CLOUDFLARE_CONFIG: ${{secrets.CLOUDFLARE_CONFIG}}
+
+      # - name: Get Cloudflare tfvars
+      #   uses: benniemosher/action-get-keybase-secret@bam/fix-file-location
+      #   if: ${{ inputs.get_cloudflare_tfvars == true }}
+      #   with:
+      #     repo: keybase://private/benniemosher/secrets
+      #     file: cloudflare.auto.tfvars
+      #     # prefix: ""
+      #   env:
+      #     KEYBASE_PAPERKEY: ${{ secrets.KEYBASE_PAPERKEY }}
+      #     KEYBASE_USERNAME: ${{ secrets.KEYBASE_USERNAME }}
+
+      - name: Cache .infracost/terraform_modules for target branch
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.TF_ROOT }}/**/.infracost/terraform_modules/**
+            !${{ env.TF_ROOT }}/**/.infracost/terraform_modules/**/.git/**
+          key: infracost-terraform-modules-${{ runner.os }}-${{ github.event.pull_request.base.sha || github.sha }}
+          # If there's no cached record for this commit, pull in the latest cached record anyway
+          # Internally infracost will downloaded any additional required modules if required
+          restore-keys: infracost-terraform-modules-${{ runner.os }}-
+        if: steps.cache-infracost-base-json.outputs.cache-hit != 'true'
+
+      # Generate Infracost JSON file as the baseline.
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown \
+                              --config-file=${TF_ROOT}/infracost.yml \
+                              --format=json \
+                              --out-file=/tmp/infracost-base.json
+        if: steps.cache-infracost-base-json.outputs.cache-hit != 'true'
+
+      # Checkout the current PR branch so we can create a diff.
+      - name: Checkout PR branch
+        uses: actions/checkout@v2
+        with:
+          # Make sure the .infracost dir stays between runs so that downloaded modules persist
+          clean: false
+        if: github.event_name == 'pull_request'
+
+      - name: Cache .infracost/terraform_modules dir for PR branch
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.TF_ROOT }}/**/.infracost/terraform_modules/**
+            !${{ env.TF_ROOT }}/**/.infracost/terraform_modules/**/.git/**
+          key: infracost-terraform-modules-${{ runner.os }}-${{ github.event.pull_request.head.sha }}
+          # If there's no cached record for this commit, pull in the target's cached record or the latest cached record
+          # Internally infracost will downloaded any additional required modules if required
+          restore-keys: |
+            infracost-terraform-modules-${{ runner.os }}-${{ github.event.pull_request.base.sha }}
+            infracost-terraform-modules-${{ runner.os }}-
+        if: github.event_name == 'pull_request'
+
+      # Generate an Infracost diff and save it to a JSON file.
+      - name: Generate Infracost diff
+        run: |
+          infracost diff \
+                          --config-file=${TF_ROOT}/infracost.yml \
+                          --format=json \
+                          --compare-to=/tmp/infracost-base.json \
+                          --out-file=/tmp/infracost.json
+        if: github.event_name == 'pull_request'
+
+      # Posts a comment to the PR using the 'update' behavior.
+      # This creates a single comment and updates it. The "quietest" option.
+      # The other valid behaviors are:
+      #   delete-and-new - Delete previous comments and create a new one.
+      #   hide-and-new - Minimize previous comments and create a new one.
+      #   new - Create a new cost estimate comment on every push.
+      # See https://www.infracost.io/docs/features/cli_commands/#comment-on-pull-requests for other options.
+      # The INFRACOST_ENABLE_CLOUD​=true section instructs the CLI to send its JSON output to Infracost Cloud.
+      #   This SaaS product gives you visibility across all changes in a dashboard. The JSON output does not
+      #   contain any cloud credentials or secrets.
+
+      # - name: Post Infracost comment
+      #   run: |
+      #       INFRACOST_ENABLE_CLOUD​=true infracost comment github --path=/tmp/infracost.json \
+      #                                 --repo=$GITHUB_REPOSITORY \
+      #                                 --github-token=${{github.token}} \
+      #                                 --pull-request=${{github.event.pull_request.number}} \
+      #                                 --behavior=update
+      - name: Post Infracost comment
+        run: |
+            infracost comment github --path=/tmp/infracost.json \
+                                      --repo=$GITHUB_REPOSITORY \
+                                      --github-token=${{github.token}} \
+                                      --pull-request=${{github.event.pull_request.number}} \
+                                      --behavior=update
+        if: github.event_name == 'pull_request'

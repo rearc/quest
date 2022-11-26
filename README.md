@@ -19,7 +19,8 @@ Bennie Mosher
 ## Given More Time I'd:
 
 - [ ] Store my state in an AWS S3 bucket, on Spacelift.io, or on Terraform Cloud
-- [ ] Finalize a CI/CD system in Github Actions
+- [x] Make a CI/CD system in Github Actions
+- [ ] Make CI/CD pull cloudflare secrets file from Keybase instead of creating with Github Secrets
 - [ ] Add different environments for CI/CD
 - [ ] Write Terraform tests
 - [ ] Add Spacelift.io

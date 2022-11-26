@@ -1,0 +1,41 @@
+name: Sec
+on:
+  workflow_call:
+    secrets:
+      GITHUB_PAT:
+        required: true
+
+jobs:
+  sec:
+    name: Sec
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: TFSec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.4
+        with:
+          sarif_file: results.sarif.json
+          full_repo_scan: true
+
+      # SEE: https://github.com/aquasecurity/tfsec-pr-commenter-action
+      # This currently can not find the PR to comment on
+      - name: TFSec PR Commenter
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
+        with:
+          # tfsec_args: --soft-fail
+          github_token: ${{ secrets.GITHUB_PAT }}
+          tfsec_formats: sarif
+          soft_fail_commenter: true
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif.json
