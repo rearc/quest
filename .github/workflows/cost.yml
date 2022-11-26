@@ -54,7 +54,7 @@ jobs:
         # if: steps.cache-infracost-base-json.outputs.cache-hit != 'true'
 
       - name: Configure Cloudflare Secrets
-        run: 'echo "$CLOUDFLARE_CONFIG" > cloudflare.auto.tfvars'
+        run: 'echo "$CLOUDFLARE_CONFIG" > ${TF_ROOT}/cloudflare.auto.tfvars'
         shell: bash
         env:
           CLOUDFLARE_CONFIG: ${{secrets.CLOUDFLARE_CONFIG}}
