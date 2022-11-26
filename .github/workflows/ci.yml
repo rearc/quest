@@ -30,7 +30,7 @@ jobs:
   terraform:
     name: Terraform
     uses: ./.github/workflows/terraform.yml
-    secrets:
-      GITHUB_PAT: ${{ secrets.GHA_BOT_PAT }}
-      GIT_SSH_KEY: ${{ secrets.GHA_BOT_SSH_KEY }}
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+    # secrets:
+    #   GITHUB_PAT: ${{ secrets.GHA_BOT_PAT }}
+    #   GIT_SSH_KEY: ${{ secrets.GHA_BOT_SSH_KEY }}
+    #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
