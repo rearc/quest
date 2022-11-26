@@ -2,9 +2,9 @@ name: Terraform
 
 on:
   workflow_call:
-    # secrets:
-      # GITHUB_PAT:
-      #   required: true
+    secrets:
+      GITHUB_TOKEN:
+        required: true
       # GIT_SSH_KEY:
       #   required: true
       # TF_API_TOKEN:
@@ -20,7 +20,7 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest
     env:
-      # GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_IN_AUTOMATION: true
     steps:
       - name: Checkout
