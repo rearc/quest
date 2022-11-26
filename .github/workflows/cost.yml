@@ -29,7 +29,7 @@ jobs:
     name: Cost
     runs-on: ubuntu-latest
     env:
-      TF_ROOT: ./
+      TF_ROOT: .
 
     steps:
       - name: Setup Infracost
