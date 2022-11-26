@@ -1,18 +1,18 @@
 resource "aws_ecr_repository" "this" {
   encryption_configuration {
     encryption_type = var.config.kms-key-arn != null ? "KMS" : "AES256"
-    kms_key         = var.config.kms-key-arn != null ? local.kms-key-arn : null
+    kms_key         = var.config.kms-key-arn
   }
 
   image_scanning_configuration {
     scan_on_push = var.config.scan-images-on-push
   }
 
-  image_tag_mutability = var.config.image-tag-mutability
+  image_tag_mutability = "IMMUTABLE"
   name                 = var.config.repository-name
 
   tags = {
-    "Name" = var.config.repository-name
+    Name = var.config.repository-name
   }
 }
 

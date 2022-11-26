@@ -3,46 +3,76 @@ resource "aws_ecs_cluster" "this" {
 
   configuration {
     execute_command_configuration {
-      kms_key_id = local.kms-key-arn
+      kms_key_id = var.config.kms-key-arn
       logging    = var.config.logging-command-configuration
 
       log_configuration {
-        cloud_watch_encryption_enabled = var.config.cloud-watch-encryption-enabled
-        cloud_watch_log_group_name     = local.cloudwatch-log-group-name
+        cloud_watch_encryption_enabled = var.config.cloudwatch-encryption-enabled
+        cloud_watch_log_group_name     = module.logs.log-group.name
       }
     }
   }
 
+  dynamic "setting" {
+    for_each = var.config.cluster-settings
+    iterator = setting
+
+    content {
+      name  = setting.value.name
+      value = setting.value.value
+    }
+  }
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
   tags = {
-    "Name" = var.config.cluster-name
+    Name = var.config.cluster-name
   }
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family = var.config.cluster-name
   # TODO: Make this use a task-definition.tfpl file and check for one being passed in
   container_definitions = jsonencode([
     {
-      name = var.config.cluster-name
-      # image     = "${var.config.cluster-name}:latest"
-      image     = "${var.config.image-url}:latest"
-      cpu       = var.config.task-definition-cpu
-      memory    = var.config.task-definition-memory
-      essential = true
+      cpu         = var.config.task-definition-cpu
+      environment = var.config.environment
+      essential   = true
+      image       = "${var.config.image-url}:latest"
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.config.cluster-name}"
+          awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+      memory = var.config.task-definition-memory
+      name   = var.config.cluster-name
       portMappings = [
         {
           containerPort = var.config.task-definition-container-port
           hostPort      = var.config.task-definition-host-port
+          protocol      = "tcp"
         }
       ]
-      environment = var.config.environment
     },
   ])
-  requires_compatibilities = [var.config.launch-type]
-  network_mode             = var.config.task-definition-network-mode
-  memory                   = var.config.task-definition-memory
+
   cpu                      = var.config.task-definition-cpu
   execution_role_arn       = aws_iam_role.ecs-task-execution.arn
+  family                   = var.config.cluster-name
+  memory                   = var.config.task-definition-memory
+  network_mode             = var.config.task-definition-network-mode
+  requires_compatibilities = [var.config.launch-type]
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+  }
+
+  task_role_arn = aws_iam_role.ecs-task-execution.arn
 }
 
 resource "aws_ecs_service" "this" {
@@ -61,7 +91,6 @@ resource "aws_ecs_service" "this" {
   network_configuration {
     subnets          = var.config.subnets
     assign_public_ip = var.config.assign-public-ip
-    # TODO: try(var.config.security-groups)
     security_groups = [
       var.config.ecs-security-group
     ]

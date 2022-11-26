@@ -1,12 +1,36 @@
 # Bennie Mosher's Quest to Rearc-dom
 
-Hey all! I believe that I have all of the checkboxes checked off below that you asked for. To see the webpage, please feel free to got to http://quest.benniemosher.dev and check it out!
+Hey all! I believe that I have all of the checkboxes checked off below that you asked for. To see the webpage, please feel free to go to http://quest.benniemosher.dev and check it out!
 
 Thank you for taking the time to check out my work!
 
 Thanks,
 
 Bennie Mosher
+
+> NOTE: The first time the secret word is displayed it uses the default "TwelveFactor" secret word, not the environment variable that you pass in to the Task Definition.
+
+> NOTE: I updated src/000.js and we probably want to get that into a single PR that is imported into the main quest repo
+
+![Bennie's Quest](quest.png)
+
+## Given More Time I'd:
+
+- [ ] Store my state in an AWS S3 bucket, on Spacelift.io, or on Terraform Cloud
+- [ ] Finalize a CI/CD system in Github Actions
+- [ ] Add different environments for CI/CD
+- [ ] Write Terraform tests
+- [ ] Add Spacelift.io
+- [ ] Change the load balancer to be internal
+- [ ] Switch away from the default VPC and default subnets
+- [ ] Secure the default VPC so nothing can get in or out
+- [ ] Add lifecycle policy to the ECR
+- [ ] Add replication configuration to the ECR
+- [ ] Use a tfpl template file for the task definition
+- [ ] Use the data.aws_availability_zones to make subnets
+- [ ] Add encryption to resources like aws_ecr_repository and others for security
+- [ ] Add any logging to any resources for observability
+- [ ] Implement something like Data Dog or New Relic for observability as well
 
 ---
 

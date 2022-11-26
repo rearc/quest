@@ -1,7 +1,8 @@
-resource "aws_cloudwatch_log_group" "this" {
-  name = var.config.cluster-name
+module "logs" {
+  source = "../../modules/aws-cloudwatch-logs"
 
-  tags = {
-    "Name" = var.config.cluster-name
+  config = {
+    kms-key = var.config.kms-key-arn
+    name    = var.config.cluster-name
   }
 }

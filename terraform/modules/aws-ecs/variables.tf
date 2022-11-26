@@ -3,9 +3,10 @@ variable "config" {
   type = object({
     # security-groups                = optional(list(string), [])
     assign-public-ip               = optional(bool, true)
-    cloud-watch-encryption-enabled = optional(bool, true)
-    cloud-watch-log-group-name     = optional(bool, null)
+    cloudwatch-encryption-enabled  = optional(bool, true)
+    cloudwatch-log-group-name      = optional(bool, null)
     cluster-name                   = string
+    cluster-settings               = optional(list(any), [])
     ecs-security-group             = optional(string)
     ecs-service-count              = optional(number, 1)
     environment                    = optional(list(any), null)

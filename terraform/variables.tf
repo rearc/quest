@@ -9,6 +9,7 @@ variable "cloudflare-config" {
   type = object({
     account-id = optional(string, null)
     api-token  = string
+    cidrs      = list(string)
   })
 }
 

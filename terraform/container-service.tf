@@ -10,6 +10,7 @@ module "container-service" {
         value = "Midi-chlorians"
       }
     ]
+    kms-key-arn                = module.encryption-key.arn
     image-url                  = module.container-registry.url
     load-balancer-target-group = module.load-balancer.load-balancer-target-group
     subnets                    = module.network.subnets

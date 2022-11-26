@@ -1,6 +1,6 @@
 [
   {
-    "name": ${container-name},
+    Name: ${container-name},
     "image": ${image-url},
     "essential": true,
     "portMappings": [

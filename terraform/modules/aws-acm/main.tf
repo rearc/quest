@@ -12,7 +12,7 @@ resource "aws_acm_certificate" "this" {
   subject_alternative_names = var.config.subject-alternative-names
 
   tags = {
-    "Name" = try(var.config.certificate-domain, var.config.root-domain-name)
+    Name = try(var.config.certificate-domain, var.config.root-domain-name)
   }
 
   validation_method = var.config.validation-method

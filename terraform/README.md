@@ -1,3 +1,12 @@
+## To get Cloudflare secrets:
+
+Reach out to [@benniemosher](https://keybase.io/benniemosher) on Keybase and get access to his secrets repo then:
+
+```bash
+git clone keybase://private/benniemosher/secrets
+ln -s $HOME/Code/personal/secrets/cloudflare.auto.tfvars ./cloudflare.auto.tfvars
+```
+
 ## To Apply:
 
 Due to a race condition with cloudflare and acm validation, currently you need
@@ -18,7 +27,9 @@ tf apply -target='module.certificate.aws_acm_certificate.this'
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.40.0 |
 
 ## Modules
 
@@ -28,19 +39,25 @@ No providers.
 | <a name="module_container-registry"></a> [container-registry](#module\_container-registry) | ./modules/aws-ecr | n/a |
 | <a name="module_container-service"></a> [container-service](#module\_container-service) | ./modules/aws-ecs | n/a |
 | <a name="module_dns-records"></a> [dns-records](#module\_dns-records) | ./modules/cloudflare-dns-record | n/a |
+| <a name="module_encryption-key"></a> [encryption-key](#module\_encryption-key) | ./modules/aws-kms | n/a |
 | <a name="module_load-balancer"></a> [load-balancer](#module\_load-balancer) | ./modules/aws-loadbalancer | n/a |
 | <a name="module_network"></a> [network](#module\_network) | ./modules/aws-network | n/a |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.cloudwatch-kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws-profile"></a> [aws-profile](#input\_aws-profile) | The local AWS profile with access to the service account | `string` | `"benniemosher-quest-sandbox"` | no |
-| <a name="input_cloudflare-config"></a> [cloudflare-config](#input\_cloudflare-config) | The config to connect Terraform to Cloudflare | <pre>object({<br>    account-id = optional(string, null)<br>    api-token  = string<br>  })</pre> | n/a | yes |
+| <a name="input_cloudflare-config"></a> [cloudflare-config](#input\_cloudflare-config) | The config to connect Terraform to Cloudflare | <pre>object({<br>    account-id = optional(string, null)<br>    api-token  = string<br>    cidrs      = list(string)<br>  })</pre> | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region in which to stand up resources | `string` | `"us-east-1"` | no |
 
 ## Outputs
