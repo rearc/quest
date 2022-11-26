@@ -2,7 +2,7 @@ name: Terraform
 
 on:
   workflow_call:
-    secrets:
+    # secrets:
       # GITHUB_PAT:
       #   required: true
       # GIT_SSH_KEY:
