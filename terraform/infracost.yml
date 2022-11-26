@@ -1,6 +1,6 @@
 version: 0.1
 
 projects:
-  - path: ./terraform
+  - path: .
     terraform_var_files:
       - cloudflare.auto.tfvars
