@@ -8,9 +8,9 @@ It is a fun way to assess your cloud skills. It is also a good representative sa
 - Public cloud: AWS, GCP, Azure.
   - More than one cloud is a "good to have" but one is a "must have".
 - General cloud concepts, especially networking.
-- Containerization: Docker, containerd, K8s.
+- Containerization, such as: Docker, containerd, kubernetes
 - IaC (Infrastructure as code). At least some Terraform preferred.
-- Linux/Unix.
+- Linux (or other POSIX OS).
 - VCS (Version Control System). Git is highly preferred. 
 - TLS is a plus.
 
@@ -19,12 +19,13 @@ You may do all or some of the following tasks. Please read over the complete lis
 
 1. If you know how to use git, start a git repository (local-only is acceptable) and commit all of your work to it.
 2. Deploy the app in any public cloud and navigate to the index page.
-3. Deploy the app in a container in any public cloud and navigate to the index page.
+3. Deploy the app in a container in any public cloud using the services you think best solve this problem.
    - Use `node` as the base image. Version `node:10` or later should work.
-4. Inject an environment variable (`SECRET_WORD`) in the Docker container. The value of `SECRET_WORD` should be the secret word discovered on the index page of the application.
-5. Deploy a load balancer in front of the app.
-6. Use Infrastructure as Code (IaC) to "codify" your deployment. Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
-7. Add TLS (https). You may use locally-generated certs.
+4. Navigate to the index page.
+5. Inject an environment variable (`SECRET_WORD`) in the Docker container. The value of `SECRET_WORD` should be the secret word discovered on the index page of the application.
+6. Deploy a load balancer in front of the app.
+7. Use Infrastructure as Code (IaC) to "codify" your deployment. Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
+8. Add TLS (https). You may use locally-generated certs.
 
 ### Q. How do I know I have solved these stages?
 Each stage can be tested as follows (where `<ip_or_host>` is the location where the app is deployed):
