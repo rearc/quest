@@ -4,7 +4,7 @@
 
 It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. Quest is a webapp made with node.js and golang.
 
-### Q. So what skills should I have ?
+### Q. So what skills should I have?
 - Public cloud: AWS, GCP, Azure.
   - More than one cloud is a "good to have" but one is a "must have".
 - General cloud concepts, especially networking.
@@ -14,26 +14,27 @@ It is a fun way to assess your cloud skills. It is also a good representative sa
 - VCS (Version Control System). Git is highly preferred. 
 - TLS is a plus.
 
-### Q. What do I have to do ?
+### Q. What do I have to do?
 You may do all or some of the following tasks. Please read over the complete list before starting.
 
 1. If you know how to use git, start a git repository (local-only is acceptable) and commit all of your work to it.
-3. Deploy the app in a container in any public cloud using the services you think best solve this problem.
+1. Use Infrastructure as Code (IaC) to the deploy the code as specified below.
+   - Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
+1. Deploy the app in a container in any public cloud using the services you think best solve this problem.
    - Use `node` as the base image. Version `node:10` or later should work.
-4. Navigate to the index page.
-5. Inject an environment variable (`SECRET_WORD`) in the Docker container. The value of `SECRET_WORD` should be the secret word discovered on the index page of the application.
-6. Deploy a load balancer in front of the app.
-7. Use Infrastructure as Code (IaC) to "codify" your deployment. Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
-8. Add TLS (https). You may use locally-generated certs.
+1. Navigate to the index page to obtain the SECRET_WORD.
+1. Inject an environment variable (`SECRET_WORD`) in the Docker container using the value on the index page.
+1. Deploy a load balancer in front of the app.
+1. Add TLS (https). You may use locally-generated certs.
 
 ### Q. How do I know I have solved these stages?
 Each stage can be tested as follows (where `<ip_or_host>` is the location where the app is deployed):
 
 1. Public cloud & index page (contains the secret word) - `http(s)://<ip_or_host>[:port]/`
-2. Docker check - `http(s)://<ip_or_host>[:port]/docker`
-3. Secret Word check - `http(s)://<ip_or_host>[:port]/secret_word`
-4. Load Balancer check  - `http(s)://<ip_or_host>[:port]/loadbalanced`
-5. TLS check - `http(s)://<ip_or_host>[:port]/tls`
+1. Docker check - `http(s)://<ip_or_host>[:port]/docker`
+1. Secret Word check - `http(s)://<ip_or_host>[:port]/secret_word`
+1. Load Balancer check  - `http(s)://<ip_or_host>[:port]/loadbalanced`
+1. TLS check - `http(s)://<ip_or_host>[:port]/tls`
 
 ### Q. Do I have to do all these?
 You may do whichever, and however many, of the tasks above as you'd like. We suspect that once you start, you won't be able to stop. It's addictive. Extra credit if you are able to submit working entries for more than one cloud provider.
@@ -42,10 +43,10 @@ You may do whichever, and however many, of the tasks above as you'd like. We sus
 1. Your work assets, as one or both of the following:
    - A link to a hosted git repository.
    - A compressed file containing your project directory (zip, tgz, etc). Include the `.git` sub-directory if you used git.
-2. Proof of completion, as one or both of the following:
+1. Proof of completion, as one or both of the following:
    - Link(s) to hosted public cloud deployment(s).
    - One or more screenshots showing, at least, the index page of the final deployment in one or more public cloud(s) you have chosen.
-3. An answer to the prompt: "Given more time, I would improve..."
+1. An answer to the prompt: "Given more time, I would improve..."
    - Discuss any shortcomings/immaturities in your solution and the reasons behind them (lack of time is a perfectly fine reason!)
    - **This may carry as much weight as the code itself**
 
