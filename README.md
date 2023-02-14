@@ -18,7 +18,6 @@ It is a fun way to assess your cloud skills. It is also a good representative sa
 You may do all or some of the following tasks. Please read over the complete list before starting.
 
 1. If you know how to use git, start a git repository (local-only is acceptable) and commit all of your work to it.
-2. Deploy the app in any public cloud and navigate to the index page.
 3. Deploy the app in a container in any public cloud using the services you think best solve this problem.
    - Use `node` as the base image. Version `node:10` or later should work.
 4. Navigate to the index page.
