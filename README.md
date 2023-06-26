@@ -73,3 +73,6 @@ There is no fail. Complete whatever you can and then submit your work. Doing _ev
 
 ### Q. Can I share this quest with others?
 No. After interviewing, please change any solutions shared publicly to be private.
+
+### Q. Do I have to spend money out of my own pocket to complete the quest?
+No. There are many possible solutions to this quest that would be zero cost to you when using [AWS](https://aws.amazon.com/free), [GCP](https://cloud.google.com/free), or [Azure](https://azure.microsoft.com/en-us/pricing/free-services).
