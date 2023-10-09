@@ -3,27 +3,32 @@
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
 version: "1.0"
-
-#Specify inspection profile for code analysis
+linter: registry.jetbrains.team/p/sa/containers/qodana-js:latest
+projectJDK: 11
 profile:
-  name: qodana.starter
-
-#Enable inspections
-#include:
-#  - name: <SomeEnabledInspectionId>
-
-#Disable inspections
-#exclude:
-#  - name: <SomeDisabledInspectionId>
-#    paths:
-#      - <path/where/not/run/inspection>
-
-#Execute shell command before Qodana execution (Applied in CI/CD pipeline)
-#bootstrap: sh ./prepare-qodana.sh
-
-#Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
-#plugins:
-#  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
-
-#Specify Qodana linter for analysis (Applied in CI/CD pipeline)
-linter: jetbrains/qodana-jvm-community:latest
+  name: qodana.recommended
+exclude:
+  - name: All
+    paths:
+      - node_modules/
+      - common/node_modules/
+      - scan/node_modules/
+      - vsts/node_modules/
+      - scan/jest.config.js
+      - common/lib
+      - scan/lib
+      - scan/dist
+      - scan/__tests__
+      - vsts/lib
+      - vsts/QodanaScan
+include:
+  - name: Eslint
+  - name: GrazieInspection
+  - name: IdentifierGrammar
+  - name: LanguageDetectionInspection
+  - name: CheckDependencyLicenses
+licenseRules:
+  - keys:
+      - "Apache-2.0"
+    allowed:
+      - "0BSD"
