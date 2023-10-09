@@ -3,7 +3,7 @@
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
 version: "1.0"
-linter: jetbrains/qodana-jvm-community:latest
+linter: jetbrains/qodana-js-community:latest
 projectJDK: 11
 profile:
   name: qodana.recommended
@@ -11,24 +11,7 @@ exclude:
   - name: All
     paths:
       - node_modules/
-      - common/node_modules/
-      - scan/node_modules/
-      - vsts/node_modules/
-      - scan/jest.config.js
-      - common/lib
-      - scan/lib
-      - scan/dist
-      - scan/__tests__
-      - vsts/lib
-      - vsts/QodanaScan
 include:
   - name: Eslint
   - name: GrazieInspection
-  - name: IdentifierGrammar
   - name: LanguageDetectionInspection
-  - name: CheckDependencyLicenses
-licenseRules:
-  - keys:
-      - "Apache-2.0"
-    allowed:
-      - "0BSD"
