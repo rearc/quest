@@ -3,7 +3,7 @@
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
 version: "1.0"
-linter: registry.jetbrains.team/p/sa/containers/qodana-js:latest
+linter: jetbrains/qodana-jvm-community:latest
 projectJDK: 11
 profile:
   name: qodana.recommended
