@@ -1,27 +1,59 @@
+
+# VPC MODULE: Networking setup
+
 module "vpc" {
   source               = "./modules/vpc"
-  prefix               = var.prefix
-  region               = var.region
-  vpc_cidr             = "10.0.0.0/16"
-  public_subnet_a_cidr = "10.0.1.0/24"
-  public_subnet_b_cidr = "10.0.2.0/24"
+  prefix               = var.prefix                         
+  region               = var.region                         
+  vpc_cidr             = var.vpc_cidr                       
+  public_subnet_a_cidr = var.public_subnet_a_cidr           
+  public_subnet_b_cidr = var.public_subnet_b_cidr           
 }
 
 
-# EC2 Module
-module "ec2" {
-  source        = "./modules/ec2"
-  ami_id = var.ami_id
-  prefix        = var.prefix
-  region        = var.region
-  instance_type = var.instance_type
-  docker_image  = var.docker_image
-  secret_word   = var.secret_word
-  docker_image_tag = var.docker_image_tag
-  depends_on = [
-    module.vpc
-  ]
+# Route53 Zone Lookup
+
+data "aws_route53_zone" "main" {
+  name         = var.domain_name        
+  private_zone = false
 }
+
+
+# KEY PAIR (EC2 SSH Access - generated)
+
+resource "tls_private_key" "ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096                      
+}
+
+resource "aws_key_pair" "main_key" {
+  key_name   = "${var.prefix}-key"                      #
+  public_key = tls_private_key.ssh_key.public_key_openssh
+}
+
+# Store private key locally to use for SSH
+resource "local_file" "private_key" {
+  content         = tls_private_key.ssh_key.private_key_pem
+  filename        = "${path.module}/${var.prefix}-private-key.pem"
+  file_permission = "0400"
+}
+
+
+# ALB MODULE: Load balancer + ASG setup
+
 module "alb" {
-  source = "./modules/alb"
+  source                 = "./modules/alb"
+  prefix                 = var.prefix
+  region                 = var.region
+  instance_type          = var.instance_type
+  ami_id                 = var.ami_id
+  docker_image           = var.docker_image
+  docker_image_tag       = var.docker_image_tag
+  secret_word            = var.secret_word
+  key_name               = aws_key_pair.main_key.key_name
+  domain_name            = var.domain_name
+  alternate_domain_names = var.alternate_domain_names
+  acm_certificate_arn    = var.acm_certificate_arn
+
+  depends_on = [module.vpc]     
 }

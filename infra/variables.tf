@@ -1,4 +1,3 @@
-
 variable "prefix" {}
 variable "region" {}
 variable "vpc_cidr" {}
@@ -8,4 +7,7 @@ variable "instance_type" {}
 variable "secret_word" {}
 variable "docker_image" {}
 variable "ami_id" {}
-variable "docker_image_tag"{}
+variable "docker_image_tag" {}
+variable "domain_name" {}
+variable "alternate_domain_names" {}
+variable "acm_certificate_arn" {}

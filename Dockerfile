@@ -9,6 +9,5 @@ COPY . .
 
 EXPOSE 3000
 
-ENV SECRET_WORD="test"
 
 CMD ["npm", "start"]

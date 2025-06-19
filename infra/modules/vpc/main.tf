@@ -1,3 +1,4 @@
+# Create VPC
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
   tags = {
@@ -5,12 +6,14 @@ resource "aws_vpc" "vpc" {
   }
 }
 
+# Store VPC ID in SSM Parameter Store
 resource "aws_ssm_parameter" "vpc" {
-  name = "/${var.prefix}/vpc/id"
-  value = "${aws_vpc.vpc.id}"
+  name  = "/${var.prefix}/vpc/id"
+  value = aws_vpc.vpc.id
   type  = "String"
 }
 
+# Create Public Subnet A
 resource "aws_subnet" "public_subnet_a" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.public_subnet_a_cidr
@@ -20,12 +23,14 @@ resource "aws_subnet" "public_subnet_a" {
   }
 }
 
+# Store Subnet A ID in SSM
 resource "aws_ssm_parameter" "subnet_a" {
-  name = "/${var.prefix}/subnet/a/id"
-  value = "${aws_subnet.public_subnet_a.id}"
+  name  = "/${var.prefix}/subnet/a/id"
+  value = aws_subnet.public_subnet_a.id
   type  = "String"
 }
 
+# Create Public Subnet B
 resource "aws_subnet" "public_subnet_b" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.public_subnet_b_cidr
@@ -35,12 +40,14 @@ resource "aws_subnet" "public_subnet_b" {
   }
 }
 
+# Store Subnet B ID in SSM
 resource "aws_ssm_parameter" "subnet_b" {
-  name = "/${var.prefix}/subnet/b/id"
-  value = "${aws_subnet.public_subnet_b.id}"
+  name  = "/${var.prefix}/subnet/b/id"
+  value = aws_subnet.public_subnet_b.id
   type  = "String"
 }
 
+# Create Internet Gateway
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
@@ -48,6 +55,7 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
+# Route table for public subnets
 resource "aws_route_table" "public_subnet_routes" {
   vpc_id = aws_vpc.vpc.id
 
@@ -61,11 +69,13 @@ resource "aws_route_table" "public_subnet_routes" {
   }
 }
 
+# Associate route table with Subnet A
 resource "aws_route_table_association" "public_subnet_routes_assn_a" {
   subnet_id      = aws_subnet.public_subnet_a.id
   route_table_id = aws_route_table.public_subnet_routes.id
 }
 
+# Associate route table with Subnet B
 resource "aws_route_table_association" "public_subnet_routes_assn_b" {
   subnet_id      = aws_subnet.public_subnet_b.id
   route_table_id = aws_route_table.public_subnet_routes.id

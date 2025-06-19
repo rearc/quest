@@ -1,4 +1,26 @@
+# Node dependencies
 node_modules
+
+# Git and related
 .git
+.gitignore
+
+# Environment variables
 .env
+*.pem
+
+# Docker and Terraform files not needed inside container
 Dockerfile.dev
+docker-compose.yml
+*.tf
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.log
+
+# OS / Editor files
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
