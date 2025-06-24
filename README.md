@@ -2,7 +2,7 @@
 
 ### Q. What is this quest?
 
-It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. Quest is a webapp made with node.js and golang.
+It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. We've built the Quest webapp with node.js and golang. Your job, should you wish to accept it, is to complete a series of tasks to make it run in the cloud. 
 
 ### Q. So what skills should I have?
 - Public cloud: AWS, GCP, Azure.
@@ -17,7 +17,7 @@ It is a fun way to assess your cloud skills. It is also a good representative sa
 ### Q. What do I have to do?
 You may do all or some of the following tasks. Please read over the complete list before starting.
 
-1. If you know how to use git, start a git repository (local-only is acceptable) and commit all of your work to it.
+1. If you know how to use git, start a git repository (local-only is acceptable) using the webapp files included in this repo as a starting point. Commit all of your work to it.
 1. Use Infrastructure as Code (IaC) to the deploy the code as specified below.
    - Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
 1. Deploy the app in a container in any public cloud using the services you think best solve this problem.
