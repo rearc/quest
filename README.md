@@ -1,3 +1,37 @@
+# Solution
+Here is an explanation of some of my choices
+
+1. This is a public git repo feel free to look around and share with your friends!
+2. I have the most experience with terraform and it is more or less the industry standard.
+3. I did this in AWS but also for funsies gave it a shot in IBM Cloud
+   - see dev-ibm branch for that silliness
+   - I used ECS fargate because fargate allows us not to worry about an EC2 instance. In the real world it also offloads the ec2 related compliance requirements over to AWS in the shared responsibility model. This is important to me as a security engineer who has had to manage large scale audits because then i get to tell auditors that patching the host is Amazon's deal. This greatly reduces the vulnerability management burden from a compliance perspective. You of course also need to pay attention to container and application level vulns still.
+4. See proof.png
+5. I injected the env variable using tf in the task definition.
+   - In a real world scenario this would make it more flexible than in the dockerfile
+   - The word is meant to be displayed publically so i didnt use a secret store to inject it.
+6. An ALB is appropriate for this, it integrates natively with ECS and fargate.
+   - Also integrates with ACM well for the TLS requirement
+7. We generate a self signed cert with terraform and upload to ACM
+   - Cert validity is 47 days to meet the 2029 tls cert validity goal.
+
+### Given more time, I would improve...
+Some things i would improve to "productionize" this. In no particular order
+
+1. Create and use a terraform module instead of using raw resources
+   - This is of course a best practice and allows you to reuse the module code with sensible defaults and etc.
+   - The reason i chose to use raw resources for the quest was because as a security engineer i have less practice and familiarity with building ECS applications. It seemed like a good opportunity to gain practice, familiarity, and muscle memory with a set of resources I dont generally get to build in my day job.
+2. Setup a CICD pipeline with all the standard jobs
+   - Standard linters (tflint, trailing white spaces, etc)
+   - Docker container build pipeline
+   - Static security tests: SCA, SAST, IAC scan, dockerfile scan
+   - Dynamic testing: Using the terraform outputs run OWASP zap against the index URL in a test environment.
+   - E2E testing: Using the check_url outputs check for expected results
+3. Optimize Docker Image
+   - the standard node:25 base image is large and contains plenty of things we don't need.
+   - These things we dont need take up space and all create opportunities for more CVEs
+   - Chainguard images are good baselines for near 0 CVE base images.
+
 # A quest in the clouds
 
 ### Q. What is this quest?
