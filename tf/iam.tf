@@ -1,5 +1,7 @@
-# ── IAM ──────────────────────────────────────────────────────────────────────
-
+# iam stuff
+# note i create a deny all rule for the ecs task iam policy
+# i also set it as the permission boundary for the role
+# this prevents privesc
 data "aws_iam_policy_document" "ecs_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
