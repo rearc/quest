@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Terraform
+tf/*.tfstate
+tf/*.tfstate.backup
+tf/.terraform/
+tf/.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
