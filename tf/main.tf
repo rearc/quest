@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "quest" {
       environment = [
         {
           name  = "SECRET_WORD"
-          value = "test"
+          value = "TwelveFactor"
         }
       ]
 
