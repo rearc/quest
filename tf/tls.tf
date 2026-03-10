@@ -1,6 +1,8 @@
-# ── TLS / ACM ────────────────────────────────────────────────────────────────
+# TLS / ACM
 # Self-signed certificate generated locally and imported into ACM.
 # This satisfies the /tls check without requiring a public domain.
+# Reccomended tls cert validity is 47 days by 2029
+# https://www.digicert.com/blog/tls-certificate-lifetimes-will-officially-reduce-to-47-days
 
 resource "tls_private_key" "quest" {
   algorithm = "RSA"
@@ -15,8 +17,8 @@ resource "tls_self_signed_cert" "quest" {
     organization = "Quest"
   }
 
-  # Valid for 1 year
-  validity_period_hours = 8760
+  # Valid for 47 days
+  validity_period_hours = 1128
 
   allowed_uses = [
     "key_encipherment",
