@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "quest" {
   container_definitions = jsonencode([
     {
       name      = "quest"
-      image     = "ghcr.io/koalasec/quest:latest"
+      image     = "ghcr.io/koalasec/quest:@sha256:8ff6d588428461b42f8798e69ba87ab5a1e09064a5e2215540f4bf5620b8d00d"
       essential = true
 
       portMappings = [
