@@ -23,7 +23,27 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
 }
 
 # Task role – used by the running container itself
-resource "aws_iam_role" "ecs_task" {
-  name               = "quest-ecs-task-role"
-  assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
+data "aws_iam_policy_document" "quest_task" {
+  statement {
+    effect  = "Deny"
+    actions = ["*"]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "quest_task" {
+  name   = "quest-ecs-task-policy"
+  policy = data.aws_iam_policy_document.quest_task.json
+}
+
+resource "aws_iam_role" "quest_task" {
+  name                 = "quest-ecs-task-role"
+  assume_role_policy   = data.aws_iam_policy_document.ecs_assume_role.json
+  permissions_boundary = aws_iam_policy.quest_task.arn
+}
+
+resource "aws_iam_role_policy_attachment" "quest_task" {
+  role       = aws_iam_role.quest_task.name
+  policy_arn = aws_iam_policy.quest_task.arn
 }
