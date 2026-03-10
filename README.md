@@ -1,36 +1,51 @@
 # Solution
-Here is an explanation of some of my choices
 
-1. This is a public git repo feel free to look around and share with your friends!
-2. I have the most experience with terraform and it is more or less the industry standard.
-3. I did this in AWS but also for funsies gave it a shot in IBM Cloud
-   - see dev-ibm branch for that silliness
-   - I used ECS fargate because fargate allows us not to worry about an EC2 instance. In the real world it also offloads the ec2 related compliance requirements over to AWS in the shared responsibility model. This is important to me as a security engineer who has had to manage large scale audits because then i get to tell auditors that patching the host is Amazon's deal. This greatly reduces the vulnerability management burden from a compliance perspective. You of course also need to pay attention to container and application level vulns still.
-4. See proof.png
-5. I injected the env variable using tf in the task definition.
-   - In a real world scenario this would make it more flexible than in the dockerfile
-   - The word is meant to be displayed publically so i didnt use a secret store to inject it.
-6. An ALB is appropriate for this, it integrates natively with ECS and fargate.
-   - Also integrates with ACM well for the TLS requirement
-7. We generate a self signed cert with terraform and upload to ACM
-   - Cert validity is 47 days to meet the 2029 tls cert validity goal.
+Below is an overview of my architectural decisions and the reasoning behind each.
 
-### Given more time, I would improve...
-Some things i would improve to "productionize" this. In no particular order
+## Implementation Choices
 
-1. Create and use a terraform module instead of using raw resources
-   - This is of course a best practice and allows you to reuse the module code with sensible defaults and etc.
-   - The reason i chose to use raw resources for the quest was because as a security engineer i have less practice and familiarity with building ECS applications. It seemed like a good opportunity to gain practice, familiarity, and muscle memory with a set of resources I dont generally get to build in my day job.
-2. Setup a CICD pipeline with all the standard jobs
-   - Standard linters (tflint, trailing white spaces, etc)
-   - Docker container build pipeline
-   - Static security tests: SCA, SAST, IAC scan, dockerfile scan
-   - Dynamic testing: Using the terraform outputs run OWASP zap against the index URL in a test environment.
-   - E2E testing: Using the check_url outputs check for expected results
-3. Optimize Docker Image
-   - the standard node:25 base image is large and contains plenty of things we don't need.
-   - These things we dont need take up space and all create opportunities for more CVEs
-   - Chainguard images are good baselines for near 0 CVE base images.
+1. **Version Control** — This repository is public and available for review.
+
+2. **Infrastructure as Code: Terraform** — Terraform is the industry standard for cloud IaC and the tool I have the most production depth with. It provides a clear, auditable, declarative state model well-suited for client-facing deliverables.
+
+3. **Cloud Provider: AWS (primary) / IBM Cloud (bonus)**
+   - The `dev-ibm` branch contains a parallel implementation in IBM Cloud, included as an exploration of multi-cloud portability.
+   - **Compute: ECS Fargate** — Fargate was selected because it abstracts away EC2 instance management entirely. From a security and compliance standpoint, this is a meaningful architectural choice: by offloading host-level responsibility to AWS under the shared responsibility model, we eliminate the EC2 patching and host-hardening surface from vulnerability management and audit scope. This simplifies compliance posture significantly while maintaining full application-layer control. Container and application-level vulnerabilities remain in scope and are addressed separately (see improvements below).
+
+4. **Proof of completion** — See `proof.png`.
+
+5. **Secret Word Injection via Terraform Task Definition**
+   - The `SECRET_WORD` environment variable is injected at the ECS task definition level via Terraform rather than hardcoded in the Dockerfile. This decouples configuration from the container image, enabling environment-specific overrides without rebuilding images.
+   - Because this value is intended to be publicly displayed, a secrets manager (e.g., AWS Secrets Manager, Parameter Store) was not used. In a production system handling sensitive values, that would be the appropriate pattern.
+
+6. **Load Balancer: Application Load Balancer (ALB)**
+   - An ALB is the appropriate choice for this workload. It integrates natively with ECS/Fargate for target registration and health checking, and provides first-class integration with AWS Certificate Manager (ACM) for TLS termination.
+
+7. **TLS: Self-Signed Certificate via Terraform + ACM**
+   - A self-signed certificate is generated and uploaded to ACM using Terraform, keeping the TLS configuration fully automated and version-controlled.
+   - Certificate validity is set to **47 days** to align with the [CA/Browser Forum's anticipated 2029 maximum validity requirements](https://cabforum.org/), demonstrating forward-looking compliance awareness.
+
+---
+
+## Given More Time, I Would Improve...
+
+The following items represent known gaps I would address to bring this to a production-ready, client-deliverable standard:
+
+1. **Terraform Module Abstraction**
+   - The current implementation uses raw Terraform resources intentionally. ECS/Fargate is not a resource set I build daily in my security engineering role, and working at the resource level was a deliberate choice to deepen familiarity and build the muscle memory needed to own this infrastructure confidently.
+   - In a client engagement, this would be refactored into a reusable module with sensible defaults, input validation, and published documentation.
+
+2. **CI/CD Pipeline**
+   A full pipeline would include:
+   - **Static analysis:** `tflint`, trailing whitespace, Terraform formatting checks
+   - **Security scanning:** SCA (dependency vulnerabilities), SAST, IaC scanning (e.g., Checkov, tfsec), Dockerfile scanning (e.g., Trivy, Grype)
+   - **Container build pipeline:** Automated image builds on commit with digest pinning
+   - **Dynamic testing:** OWASP ZAP scan against the deployed URL in an ephemeral test environment
+   - **End-to-end verification:** Automated validation of all `/check` endpoints using Terraform outputs
+
+3. **Container Image Hardening**
+   - The `node:25` base image is large and carries unnecessary packages, each representing additional CVE surface area.
+   - The recommended path is migrating to a distroless or [Chainguard](https://www.chainguard.dev/) base image, which routinely achieves near-zero known CVEs at the OS layer while maintaining compatibility with Node.js workloads.
 
 # A quest in the clouds
 
