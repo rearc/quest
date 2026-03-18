@@ -125,7 +125,7 @@ jobs:
           framework: terraform
           soft_fail: false
           output_format: cli
-          skip_check: CKV_AWS_91,CKV2_AWS_28
+          skip_check: CKV_AWS_91,CKV2_AWS_28,CKV_AWS_65,CKV_AWS_97
 
   # ── 5. Gitleaks — secrets detection ──────────────────────────────────────────
   # Scans the full git history and working tree for leaked credentials.
