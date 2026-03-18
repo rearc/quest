@@ -16,12 +16,10 @@ on:
   push:
     branches:
       - master
-      - main
       - dev-aws
   pull_request:
     branches:
       - master
-      - main
 
 # Minimal default permissions — jobs elevate only what they need.
 permissions:
@@ -71,7 +69,8 @@ jobs:
           scan-type: fs
           scan-ref: .
           format: table
-          severity: CRITICAL,HIGH,MEDIUM
+          severity: CRITICAL
+          exit-code: '1'
           scanners: vuln,misconfig,secret
 
   # ── 3. Trivy Docker image scan ────────────────────────────────────────────────
@@ -96,7 +95,8 @@ jobs:
           scan-type: image
           image-ref: quest:${{ github.sha }}
           format: table
-          severity: CRITICAL,HIGH,MEDIUM
+          severity: CRITICAL
+          exit-code: '1'
           scanners: vuln
 
   # ── 4. Checkov — Terraform/IaC static analysis ───────────────────────────────
