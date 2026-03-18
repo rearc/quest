@@ -1,0 +1,210 @@
+# Security testing pipeline for the quest Node.js/Express + Terraform project.
+#
+# Required GitHub Secrets:
+#   ANTHROPIC_API_KEY  - API key for the Claude Code CLI security review job.
+#                        The claude-review job uses continue-on-error so the
+#                        pipeline does not fail if this secret is absent.
+#
+# GitHub Advanced Security (GHAS) must be enabled on the repository for SARIF
+# uploads from trivy-fs and trivy-image to appear in the Security tab.
+# For public repositories this is free.
+#
+# Recommended branch protection rules (Settings > Branches > main/master):
+#   Require status checks: npm audit, Trivy filesystem scan, Trivy image scan,
+#   Checkov IaC scan, Gitleaks secrets scan
+#   Do NOT require: Claude Code security review (continue-on-error / advisory)
+
+name: Security
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - dev-aws
+  pull_request:
+    branches:
+      - master
+      - main
+
+# Minimal default permissions — jobs elevate only what they need.
+permissions:
+  contents: read
+
+jobs:
+
+  # ── 1. npm audit ─────────────────────────────────────────────────────────────
+  # Checks Node.js dependencies for known CVEs.
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '25'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+
+  # ── 2. Trivy filesystem scan (deps + IaC + secrets) ──────────────────────────
+  # Scans source code, dependencies, and Terraform IaC.
+  # SARIF output is uploaded to the GitHub Advanced Security tab.
+  trivy-fs:
+    name: Trivy filesystem scan
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      security-events: write # required for SARIF upload
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-fs-results.sarif
+          severity: CRITICAL,HIGH,MEDIUM
+          scanners: vuln,misconfig,secret
+
+      - name: Upload Trivy SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
+        if: always() # upload even if the scan step exits non-zero
+        with:
+          sarif_file: trivy-fs-results.sarif
+          category: trivy-fs
+
+  # ── 3. Trivy Docker image scan ────────────────────────────────────────────────
+  # Builds the Docker image then scans it for OS/library CVEs.
+  # Runs after trivy-fs to avoid competing for runner resources during the build.
+  trivy-image:
+    name: Trivy image scan
+    runs-on: ubuntu-24.04
+    needs: trivy-fs
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Build Docker image
+        run: docker build -t quest:${{ github.sha }} .
+
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.28.0
+        with:
+          scan-type: image
+          image-ref: quest:${{ github.sha }}
+          format: sarif
+          output: trivy-image-results.sarif
+          severity: CRITICAL,HIGH,MEDIUM
+          scanners: vuln
+
+      - name: Upload Trivy image SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
+        if: always()
+        with:
+          sarif_file: trivy-image-results.sarif
+          category: trivy-image
+
+  # ── 4. Checkov — Terraform/IaC static analysis ───────────────────────────────
+  # Scans tf/ for Terraform misconfigurations against CIS, NIST, and AWS benchmarks.
+  #
+  # skip_check baseline (tune after first run):
+  #   CKV_AWS_91  - ALB access logging (acceptable for a demo project)
+  #   CKV2_AWS_28 - WAF on ALB (out of scope)
+  #
+  # Additional checks you may need to skip on first run:
+  #   CKV_AWS_65  - ECS Container Insights disabled (intentional in this project)
+  #   CKV_AWS_97  - ECS task secrets in plaintext env (SECRET_WORD in main.tf)
+  checkov:
+    name: Checkov IaC scan
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@b4fd9b36bb7c4a7f29e0c52f4e5a1caab3c7ecdc # v12.2930.0
+        with:
+          directory: tf/
+          framework: terraform
+          soft_fail: false
+          output_format: cli
+          skip_check: CKV_AWS_91,CKV2_AWS_28
+
+  # ── 5. Gitleaks — secrets detection ──────────────────────────────────────────
+  # Scans the full git history and working tree for leaked credentials.
+  # fetch-depth: 0 is required so Gitleaks can scan all commits, not just HEAD.
+  gitleaks:
+    name: Gitleaks secrets scan
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── 6. Claude Code AI security review ────────────────────────────────────────
+  # Best-effort, non-blocking AI review using the Claude Code CLI.
+  # Requires ANTHROPIC_API_KEY to be set as a repository secret.
+  # continue-on-error: true means a missing key or API error will not block merges.
+  # The review is printed to the job log and saved as a downloadable artifact.
+  claude-review:
+    name: Claude Code security review
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Claude Code security review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude --print \
+            "You are a security auditor. Review this codebase for security vulnerabilities. \
+            Focus on: Node.js/Express application code in src/, Dockerfile configuration, \
+            and Terraform IaC in tf/. Report findings grouped by severity \
+            (CRITICAL, HIGH, MEDIUM, LOW). Be concise and actionable." \
+            2>&1 | tee claude-security-review.txt
+
+      - name: Upload Claude review artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: claude-security-review-${{ github.sha }}
+          path: claude-security-review.txt
+          retention-days: 30
