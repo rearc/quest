@@ -156,6 +156,7 @@ jobs:
     runs-on: ubuntu-24.04
     continue-on-error: true
     permissions:
+      pull-requests: write
       contents: read
     runs-on: ubuntu-latest
     steps:
@@ -167,12 +168,5 @@ jobs:
       - uses: anthropics/claude-code-security-review@main
         with:
           comment-pr: true
+          upload-results: true
           claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
-
-      - name: Upload Claude review artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: always()
-        with:
-          name: claude-security-review-${{ github.sha }}
-          path: claude-security-review.txt
-          retention-days: 30
