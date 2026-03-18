@@ -157,28 +157,17 @@ jobs:
     continue-on-error: true
     permissions:
       contents: read
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/checkout@v4
         with:
-          node-version: '20'
-
-      - name: Install Claude Code CLI
-        run: npm install -g @anthropic-ai/claude-code
-
-      - name: Run Claude Code security review
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          claude --print \
-            "You are a security auditor. Review this codebase for security vulnerabilities. \
-            Focus on: Node.js/Express application code in src/, Dockerfile configuration, \
-            and Terraform IaC in tf/. Report findings grouped by severity \
-            (CRITICAL, HIGH, MEDIUM, LOW). Be concise and actionable." \
-            2>&1 | tee claude-security-review.txt
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+      
+      - uses: anthropics/claude-code-security-review@main
+        with:
+          comment-pr: true
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
 
       - name: Upload Claude review artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
