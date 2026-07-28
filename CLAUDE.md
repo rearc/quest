@@ -15,7 +15,21 @@ npm install     # install dependencies (express only)
 npm start       # run the app locally on :3000 (node src/000.js)
 ```
 
-There is no lint or test tooling configured in the seed repo (`package.json` has no `lint`/`test` scripts). Any lint/test tooling for IaC, Dockerfiles, or new app code added during this project should be documented here as it's introduced.
+There is no lint or test tooling configured for the Node app in the seed repo (`package.json` has no `lint`/`test` scripts).
+
+### Terraform (state bootstrap)
+
+Authenticates via IAM Identity Center (SSO) under the `rearc-quest` profile — run `aws sso login --profile rearc-quest` to refresh credentials before `plan`/`apply`.
+
+```bash
+cd terraform/bootstrap
+terraform init      # install aws provider
+terraform fmt -check
+terraform validate
+terraform test      # mocked AWS provider — no credentials or cost required
+terraform plan       # requires the rearc-quest SSO profile above
+terraform apply      # one-time, manual — creates the real state bucket
+```
 
 ### Verifying each quest stage
 
