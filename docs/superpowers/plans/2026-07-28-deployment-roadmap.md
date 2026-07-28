@@ -17,19 +17,24 @@ choices / Rollout sections) — this document only sequences the *what* and
 
 - **Goal:** stand up the automated review gate every later PR runs
   through, before building app-specific infrastructure on top of it.
-- **Key deliverables:** a workflow that runs `terraform fmt -check`,
+- **Key deliverables:** a PR workflow that runs `terraform fmt -check`,
   `terraform validate`, and `terraform test` (mocked provider) against
-  `terraform/bootstrap/` and the future main stack on every PR; a
-  workflow that builds the Docker image (and runs `docker build` as a
-  smoke test) once the Dockerfile exists in Step 1. No `terraform plan`
-  against real AWS and no `terraform apply`/deploy step — those stay
-  human-only per `CLAUDE.md`'s existing rule.
+  both `terraform/bootstrap/` and the main app stack, plus `terraform
+  plan` against real AWS for the main stack (review only, no apply); a
+  merge-to-`main` workflow that runs `terraform apply` for the **main app
+  stack only**, via a least-privilege OIDC role scoped to that stack's
+  resources — `terraform/bootstrap/` is explicitly excluded from any CI
+  apply and stays a manual, human-only operation (it bootstraps the very
+  state backend these CI runs depend on, so it can't depend on them in
+  return); a workflow that builds the Docker image (and runs `docker
+  build` as a smoke test) once the Dockerfile exists in Step 1.
 - **Depends on:** nothing — can land first, ahead of the app-specific
   stages, and is the reason it's numbered 0 rather than appended at the
   end.
 - **Verifies:** CI runs green on its own PR; no quest route to check.
-- **Follow-up:** once this merges, `CLAUDE.md`'s "this repo has no CI"
-  aside (in the Terraform engineering-standards bullet) needs updating.
+- **Follow-up:** once this merges, `CLAUDE.md`'s Terraform standards
+  bullet (currently "never run by an agent or CI — this repo has no CI")
+  needs updating to describe the apply-on-merge model for the main stack.
 
 ### Step 1: Containerize the app
 
@@ -70,8 +75,11 @@ choices / Rollout sections) — this document only sequences the *what* and
 ### Step 4: EKS cluster
 
 - **Goal:** stand up the control plane and compute for the app.
-- **Key deliverables:** EKS cluster, node group or Fargate profile, IRSA
-  (`aws-auth`/access entries), cluster autoscaler consideration.
+- **Key deliverables:** EKS cluster — including KMS envelope encryption
+  for Kubernetes Secrets (`encryption_config` block, set at cluster
+  creation so Step 7's ESO-materialized Secrets are covered from the
+  start) — node group or Fargate profile, IRSA (`aws-auth`/access
+  entries), cluster autoscaler consideration.
 - **Depends on:** Step 3.
 - **Verifies:** no quest route yet; `kubectl get nodes` healthy.
 
@@ -79,8 +87,12 @@ choices / Rollout sections) — this document only sequences the *what* and
 
 - **Goal:** get traffic from an ALB into a pod, satisfying the
   load-balanced check.
-- **Key deliverables:** AWS Load Balancer Controller (via Helm),
-  `Ingress` resource routing to a placeholder or real Service.
+- **Key deliverables:** AWS Load Balancer Controller (via Helm), and an
+  `Ingress`/`Service`/`Deployment` routing to the **real app image**
+  (not a placeholder) — `/loadbalanced` depends on the app's own
+  header-echo logic, so nothing generic can satisfy it. This is why the
+  step depends on Step 2 (ECR). Step 8 later consolidates these
+  hand-wired manifests into a proper parameterized Helm chart.
 - **Depends on:** Steps 2 and 4.
 - **Verifies:** `/loadbalanced`.
 
@@ -96,17 +108,22 @@ choices / Rollout sections) — this document only sequences the *what* and
 
 - **Goal:** get `SECRET_WORD` into the running pod without baking it into
   the image, end-to-end on the cluster (not just locally per Step 1).
-- **Key deliverables:** Secrets Manager secret, sync mechanism (External
-  Secrets Operator vs. Secrets Store CSI driver — decide explicitly in
-  this chunk), IRSA scoping for the sync.
-- **Depends on:** Step 4 (needs IRSA); can proceed in parallel with
-  Steps 5–6.
+- **Key deliverables:** Secrets Manager secret; **External Secrets
+  Operator (ESO)** installed via Helm to sync it into a native
+  Kubernetes `Secret`, consumed via `envFrom`/`secretKeyRef` (matches the
+  app's env-var expectation with no init-container/wrapper plumbing,
+  unlike the Secrets Store CSI driver's file-mount approach); IRSA
+  scoping for ESO's IAM role. Relies on the KMS envelope encryption
+  enabled on the cluster in Step 4 to keep the resulting Secret encrypted
+  at rest in etcd.
+- **Depends on:** Step 4 (needs IRSA + the cluster's `encryption_config`);
+  can proceed in parallel with Steps 5–6.
 - **Verifies:** `/secret_word`, on the cluster.
 
 ### Step 8: App Helm chart
 
-- **Goal:** replace any placeholder Service/Ingress from Step 5 with a
-  proper chart deploying the real app image.
+- **Goal:** consolidate the hand-wired `Deployment`/`Service`/`Ingress`
+  from Step 5 into a proper, parameterized Helm chart.
 - **Key deliverables:** `Deployment`/`Service`/`Ingress` templates,
   `values.yaml`.
 - **Depends on:** Steps 2, 5, 6, 7 (pulls the pieces together).
