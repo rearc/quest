@@ -37,8 +37,24 @@ no natural frontend/backend split to exploit architecturally.
   annotation — a browser-trusted cert for `/tls`, not a self-signed one.
 - **Secrets:** `SECRET_WORD` lives in AWS Secrets Manager (chosen over SSM
   Parameter Store for the rotation story, at ~$0.40/mo) and is synced into
-  the pod at runtime — never baked into the image — satisfying
-  `/secret_word` while matching the repo's "inject at runtime" standard.
+  the pod by the **External Secrets Operator (ESO)**, which materializes a
+  native Kubernetes `Secret` wired in via `envFrom`/`secretKeyRef` —
+  matching the app's `docker run -e` / env-var expectation with no extra
+  plumbing, never baked into the image, satisfying `/secret_word` while
+  matching the repo's "inject at runtime" standard. The alternative,
+  the Secrets Store CSI driver, mounts secrets as files instead of
+  creating a `Secret` object; bridging that back to an env var would need
+  an init container or wrapper script, complexity this app has no use
+  for. The standard objection to ESO ("plaintext Secrets sitting in
+  etcd") is addressed at the right layer instead of avoided: **KMS
+  envelope encryption is enabled on the EKS cluster's Kubernetes Secrets**
+  (`encryption_config` on the cluster resource).
+- **CI/CD:** the main app stack's `terraform apply` runs automatically in
+  GitHub Actions on merge to `main`, via a least-privilege role scoped to
+  just that stack's resources. `terraform/bootstrap/` is deliberately
+  excluded from CI apply and stays a manual, human-only operation — it's
+  the one-time bootstrap of the state backend those CI runs would
+  otherwise depend on.
 
 ### Request flow
 
@@ -48,7 +64,7 @@ flowchart TB
     R53 --> ALB[Application Load Balancer]
     ACM[ACM Certificate] -.TLS termination.-> ALB
 
-    subgraph EKS["EKS Cluster"]
+    subgraph EKS["EKS Cluster (KMS envelope encryption on Secrets)"]
         AWSLBC[AWS Load Balancer Controller] -.provisions.-> ALB
         ALB --> Ingress
         Ingress --> Svc[Service]
@@ -62,8 +78,10 @@ flowchart TB
 
 ### Rollout
 
-Built incrementally as separate branches/PRs: containerize the app →
-push to ECR → networking foundation → EKS cluster → ingress path → TLS →
-secrets wiring → app Helm chart → final docs pass. Each stage is verified
-against its corresponding quest route (see **Verifying each quest stage**
-in `CLAUDE.md`) before the next is built on top of it.
+Built incrementally as separate branches/PRs: set up CI/CD →
+containerize the app → push to ECR → networking foundation → EKS cluster
+→ ingress path → TLS → secrets wiring → app Helm chart → final docs pass.
+Each stage is verified against its corresponding quest route (see
+**Verifying each quest stage** in `CLAUDE.md`) before the next is built on
+top of it. Full detail per stage lives in
+`docs/superpowers/plans/2026-07-28-deployment-roadmap.md`.
