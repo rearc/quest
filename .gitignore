@@ -1,0 +1,42 @@
+# Node
+node_modules/
+npm-debug.log*
+.npm
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Keep the Terraform dependency lock file
+!.terraform.lock.hcl
+
+# Secrets / TLS material (locally-generated certs per the quest brief)
+*.pem
+*.key
+*.crt
+!*.example.*
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
