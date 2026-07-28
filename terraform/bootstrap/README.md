@@ -48,6 +48,12 @@ instead.
   public-access block enables all four block/ignore/restrict settings —
   these aren't optional hardening, they're the minimum for a state
   bucket.
+- **Known test-coverage gap:** the TLS-deny bucket policy isn't asserted
+  by `terraform test` — the mocked AWS provider doesn't evaluate
+  `aws_iam_policy_document`-rendered JSON, so there's nothing meaningful
+  to assert against in a `plan`-only mocked run. Confirmed manually via
+  `terraform apply` + AWS Console/CLI inspection of the deployed bucket
+  policy instead.
 
 ## Tearing down
 
