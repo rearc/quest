@@ -5,6 +5,12 @@ infrastructure stack (a separate, later Terraform root module). This
 module is applied **once, manually, before the main stack exists** —
 it cannot use the backend it's creating.
 
+## Requirements
+
+Terraform >= 1.11.0 (pinned in `versions.tf`, required for `use_lockfile`
+native S3 locking) and AWS provider ~> 5.0 (currently resolves to
+5.100.0, see `.terraform.lock.hcl`).
+
 ## Why this is separate from the main stack
 
 Terraform can't configure a remote backend that doesn't exist yet. This
@@ -37,6 +43,11 @@ instead.
   state recovery, but old versions would otherwise accumulate forever —
   the lifecycle rule expires noncurrent versions after 90 days to bound
   storage growth.
+- **Non-negotiable baseline controls:** a bucket policy denies all S3
+  access over non-TLS connections (`aws:SecureTransport` = false), and a
+  public-access block enables all four block/ignore/restrict settings —
+  these aren't optional hardening, they're the minimum for a state
+  bucket.
 
 ## Tearing down
 
@@ -63,6 +74,21 @@ Then:
 cd terraform/bootstrap
 terraform destroy
 ```
+
+## Inputs
+
+| Name | Default | Description |
+|---|---|---|
+| `aws_region` | `us-east-1` | AWS region for the Terraform state bucket. |
+| `project_name` | `rearc-quest` | Prefix used when naming the state bucket. |
+| `aws_profile` | `rearc-quest` | AWS CLI/SSO profile used for authentication — override with `-var="aws_profile=..."` for a different profile. |
+
+## Outputs
+
+| Name | Description |
+|---|---|
+| `state_bucket_name` | Name of the S3 bucket that holds Terraform state for the main stack. |
+| `state_bucket_region` | Region the Terraform state bucket lives in (from `var.aws_region`). |
 
 ## Usage
 

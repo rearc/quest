@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-This is the **Rearc Quest** — a take-home cloud engineering assessment (see [README.md](README.md) for the full brief). The repo currently contains only the seed webapp; everything else (IaC, Dockerfiles, CI, deployment) is work this candidate is building on top of it as a demonstration of AWS/Terraform/deployment best practices for a Lead Cloud Engineer role.
+This is the **Rearc Quest** — a take-home cloud engineering assessment (see [README.md](README.md) for the full brief). The repo currently contains only the seed webapp; everything else (IaC, Dockerfiles, CI, deployment) is work this candidate is building on top of it as a demonstration of AWS/Terraform/deployment best practices for a Lead Cloud Engineer role. Solution-specific documentation lives in [DEPLOYMENT.md](DEPLOYMENT.md), not README.md (see **Docs** under Engineering standards below).
 
 The seed app is a tiny Express server (`src/000.js`) that shells out to precompiled Go binaries in `bin/` to answer a series of "is this stage done yet?" checks. Each binary is opaque (no source included) — treat them as black boxes and don't try to decompile or modify them.
 
@@ -58,16 +58,19 @@ curl http(s)://<host>[:port]/tls            # confirms TLS termination
 
 Since the binaries are static/opaque, the effective "spec" for each stage is: get the binary invoked with the right runtime conditions (containerized, behind a load balancer, behind TLS, with the right env var) and let it self-report success.
 
+`terraform/bootstrap/` is a standalone Terraform root module with its own **local** state (deliberately not remote, since it creates the S3 bucket a remote backend would need). It's applied once, manually, to produce the state bucket that the *main* infrastructure stack — a separate, later piece of work — will use for its own remote state backend.
+
 ## Engineering standards for this project
 
 This repo is a portfolio piece for a Lead Cloud Engineer interview — the IaC, deployment approach, and history should read as production-grade, not a quick hack to pass the checks.
 
 - **Commit granularity**: commit frequently, at meaningful checkpoints (e.g. "add ECS task definition", "wire up ALB target group", "enable TLS on listener") rather than in large batches. The commit history itself is part of what's being evaluated — it should show incremental, reviewable progress through each quest stage.
 - **Verify before advancing**: after standing up infrastructure for a stage, hit the corresponding check route (see above) and confirm it passes before building the next stage on top of it.
-- **Terraform**: pin provider versions, run `terraform fmt`/`terraform validate` (and `terraform plan` review) before every apply, keep state and secrets out of version control, and structure resources so the "given more time" writeup can point at specific, deliberate tradeoffs rather than omissions.
+- **Terraform**: pin provider versions, run `terraform fmt`/`terraform validate` (and `terraform plan` review) before every apply, keep state and secrets out of version control, and structure resources so the "given more time" writeup can point at specific, deliberate tradeoffs rather than omissions; `terraform test` against a mocked AWS provider is the primary correctness check before any real apply, and `terraform apply` against real AWS is a human-only, manual step — never run by an agent or CI (this repo has no CI).
+- **Terraform bootstrap's local state**: `terraform/bootstrap/`'s local `terraform.tfstate` is a deliberate, gitignored exception to "keep state out of version control" above (it can't use a remote backend since it creates that backend) — don't "fix" this by adding a remote backend to the bootstrap module itself. Its `.terraform.lock.hcl` is intentionally committed (unlike `.terraform/` and `*.tfstate`, which are gitignored).
 - **Docker**: build `FROM node:10` or later per the brief; inject `SECRET_WORD` at container runtime (`docker run -e` / task definition env var), never bake it into the image.
 - **Secrets/certs**: locally-generated TLS certs and any credentials belong outside git — use `.gitignore` and a secrets manager or `-var-file` pattern, not committed files.
-- **Docs**: keep the README (or a new deployment doc) current with how to reproduce the deployment and how to tear it down — the brief explicitly grades submissions on how close they read to a finished customer deliverable.
+- **Docs**: never edit root `README.md` — it's the interviewer's original brief, kept as-is for their reference. All solution documentation (how to reproduce the deployment, how to tear it down, design tradeoffs) goes in root `DEPLOYMENT.md` instead, kept current as work lands — the brief explicitly grades submissions on how close they read to a finished customer deliverable.
 - **Branching/PRs**: every logical change gets its own branch off `master`, opened as a PR for review rather than committed straight to `master`. Don't stack unrelated changes on one branch. Plans are authored and executed via `superpowers` (`writing-plans` / `executing-plans` / `subagent-driven-development`); a plan is decomposed into PR-sized chunks of tasks per the global CLAUDE.md rule, and each chunk is its own branch/PR — one plan commonly spans several PRs, not just one. Each task within a chunk still pauses for self-review and is presented as its own commit before moving on (also per global CLAUDE.md).
 
 ## Keeping this file current
