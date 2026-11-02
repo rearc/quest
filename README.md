@@ -1,29 +1,30 @@
 # A quest in the clouds
 
 ### Q. What is this quest?
-
-It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. We've built the Quest webapp with node.js and golang. Your job, should you wish to accept it, is to complete a series of tasks to make it run in the cloud. 
+It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. We've built the Quest webapp with Node.js and golang. Your job, should you wish to accept it, is to complete a series of tasks to make it run in the cloud.
 
 ### Q. So what skills should I have?
 - Public cloud: AWS, GCP, Azure.
   - More than one cloud is a "good to have" but one is a "must have".
 - General cloud concepts, especially networking.
-- Containerization, such as: Docker, containerd, kubernetes
+- Containerization, such as: Docker, containerd, Kubernetes.
 - IaC (Infrastructure as code). At least some Terraform preferred.
 - Linux (or other POSIX OS).
-- VCS (Version Control System). Git is highly preferred. 
+- VCS (Version Control System). Git is highly preferred.
 - TLS is a plus.
 
 ### Q. What do I have to do?
 You may do all or some of the following tasks. Please read over the complete list before starting.
 
 1. If you know how to use git, start a git repository (local-only is acceptable) using the webapp files included in this repo as a starting point. Commit all of your work to it.
-2. Use Infrastructure as Code (IaC) to the deploy the code as specified below.
+2. Use Infrastructure as Code (IaC) to deploy the code as specified below.
    - Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
 3. Deploy the app in a container in any public cloud using the services you think best solve this problem.
-   - Use `node` as the base image. Version `node:10` or later should work.
+   - Use `node` as the base image. Node.js 18 or later is required (any active LTS release works).
+   - Install the dependencies with `npm install` or `npm ci`.
 4. Navigate to the index page to obtain the SECRET_WORD.
-5. Inject an environment variable (`SECRET_WORD`) in the Docker container using the value on the index page.
+   - The secret word changes periodically. If the secret word check says your word is no longer current, set `SECRET_WORD` to the word the index page shows now.
+5. Inject an environment variable (`SECRET_WORD`) in the container using the value on the index page.
 6. Deploy a load balancer in front of the app.
 7. Add TLS (https). You may use locally-generated certs.
 
@@ -33,8 +34,14 @@ Each stage can be tested as follows (where `<ip_or_host>` is the location where 
 1. Public cloud & index page (contains the secret word) - `http(s)://<ip_or_host>[:port]/`
 2. Docker check - `http(s)://<ip_or_host>[:port]/docker`
 3. Secret Word check - `http(s)://<ip_or_host>[:port]/secret_word`
-4. Load Balancer check  - `http(s)://<ip_or_host>[:port]/loadbalanced`
+4. Load Balancer check - `http(s)://<ip_or_host>[:port]/loadbalanced`
 5. TLS check - `http(s)://<ip_or_host>[:port]/tls`
+
+A few notes on the checks:
+- **Public cloud (1)**: AWS, GCP, and Azure are recognized. If you use another cloud, or your platform isn't detected, let us know what you are using and we can provide you with a secret word.
+- **Docker check (2)**: despite the name, this check recognizes many other container runtimes and platforms.
+- **Secret Word check (3)**: checks that `SECRET_WORD` holds a recent secret word.
+- **TLS check (5)**: checks for upstream TLS termination.
 
 ### Q. Do I have to do all these?
 You may do whichever, and however many, of the tasks above as you'd like. We suspect that once you start, you won't be able to stop. It's addictive. Extra credit if you are able to submit working entries for more than one cloud provider.
@@ -48,7 +55,7 @@ You may do whichever, and however many, of the tasks above as you'd like. We sus
    - One or more screenshots showing, at least, the index page of the final deployment in one or more public cloud(s) you have chosen.
 3. An answer to the prompt: "Given more time, I would improve..."
    - Discuss any shortcomings/immaturities in your solution and the reasons behind them (lack of time is a perfectly fine reason!)
-   - **This may carry as much weight as the code itself**
+   - **This may carry as much weight as the code itself.**
 
 Your work assets should include:
 
