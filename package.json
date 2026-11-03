@@ -1,13 +1,17 @@
 {
   "name": "quest",
-  "version": "1.0.0",
+  "version": "1.3.0",
+  "private": true,
   "description": "",
   "main": "src/000.js",
   "scripts": {
     "start": "node src/000.js"
   },
   "dependencies": {
-    "express": "~4.16.3"
+    "express": "~5.3.0"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [],
   "author": "Rearc",
