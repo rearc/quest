@@ -62,6 +62,7 @@ Your work assets should include:
 - IaC files, if you completed that task.
 - One or more Dockerfiles, if you completed that task.
 - A sensible README or other file(s) that contain instructions, notes, or other written documentation to help us review and assess your submission.
+  - Please include the quest version (from `package.json`, currently `1.3.0`) that you used for your submission.
   - **Note** - the more this looks like a finished solution to deliver to a customer, the better.
 
 ### Q. How long do I need to host my submission on public cloud(s)?
@@ -83,6 +84,17 @@ No. After interviewing, please change any solutions shared publicly to be privat
 
 ### Q. Do I have to spend money out of my own pocket to complete the quest?
 No. There are many possible solutions to this quest that would be zero cost to you when using [AWS](https://aws.amazon.com/free), [GCP](https://cloud.google.com/free), or [Azure](https://azure.microsoft.com/en-us/pricing/free-services).
+
+### Q. Is it safe to run the quest binaries in my cloud account?
+The Go binaries in `bin/` are closed source because they check your solution. They need no credentials, cloud permissions, or outbound internet access, and they write nothing outside the container. Run them the way you would run any untrusted third-party workload:
+
+- Use a sandbox or free-tier account (or project or subscription) with nothing else in it, and set a budget alert.
+- Give the container no IAM role, service account, or managed identity, and no access to secrets (`SECRET_WORD` can be in the environment, it is not security sensitive).
+- Run it as a non-root user with a read-only root filesystem and all Linux capabilities dropped.
+- Expose only the container's HTTP port 3000. You can block all network egress.
+- You can stop the service or even tear everything down once you have your screenshot.
+
+None of this affects the checks, and a locked-down deployment is a good thing to show in your submission.
 
 ### Q. Can I use AI to assist me?
 You may use AI as a reference tool but there will be a strong expectation to exhibit the same expertise and understanding from your submission in your interview. In addition we encourage you to be open about any usage! Please document what you used, what your prompts were, how it helped, what it got wrong, etc.
